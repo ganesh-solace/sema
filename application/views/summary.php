@@ -30,11 +30,16 @@
                 // exit;
                 foreach($brand_data as $brand):
             ?>
-                <div class="col-md-5 padding-5"><span>Associated Date: </span></div><div class="col-md-7 padding-5"><span><?=$brand['CreatedDate'];?></span></div>
+                <div class="col-md-5 padding-5"><span>Associated Date: </span></div><div class="col-md-7 padding-5"><span><?php echo (isset($brand['CreatedDate'])) ? $brand['CreatedDate'] : '-' ?></span></div>
+                
                 <div class="col-md-5 padding-5"><span>Last Data Refresh: </span></div><div class="col-md-7 padding-5"><span><b>August 31, 2018 at 2:10:52 PM</b></span></div>
-                <div class="col-md-5 padding-5"><span>Number of Items: </span></div><div class="col-md-7 padding-5"><span><?=$brand['NumberOfItem'];?></span></div>
-                <div class="col-md-5 padding-5"><span>SEMA Brand Class: </span></div><div class="col-md-7 padding-5"><span><?=$brand['sema_class'];?></span></div>
-                <div class="col-md-5 padding-5"><span>Associate Sellers: </span></div><div class="col-md-7 padding-5"><span><?=$brand['associate_seller_count'];?></span></div>
+                
+                <div class="col-md-5 padding-5"><span>Number of Items: </span></div><div class="col-md-7 padding-5"><span><?php echo (isset($brand['NumberOfItem'])) ? $brand['NumberOfItem'] : '-' ?></span></div>
+
+                <div class="col-md-5 padding-5"><span>SEMA Brand Class: </span></div><div class="col-md-7 padding-5"><span><?php echo (isset($brand['sema_class'])) ? $brand['sema_class'] : '-' ?></span></div>
+                
+                <div class="col-md-5 padding-5"><span>Associate Sellers: </span></div><div class="col-md-7 padding-5"><span><?php echo (isset($brand['associate_seller_count'])) ? $brand['associate_seller_count'] : '-' ?></span></div>
+
                 <div class="col-md-5 padding-5"><span>Associate Webstores: </span></div><div class="col-md-7 padding-5"><span><b>15</b></span></div>
             <?php
                 endforeach;
