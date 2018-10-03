@@ -5,7 +5,7 @@ class Sellers extends BaseController {
 
 	 public function __construct() {
         parent::__construct();
-        $this->load->model("SellerModel", "seller");
+        // $this->load->model("SellerModel", "seller");
     }
 
     public function index() {
@@ -20,8 +20,10 @@ class Sellers extends BaseController {
         $data["type"] = $type_values;
         $data["amount"] = $amount_values;
         $data["base"] = $base_values;
+        
+		$this->template->load('template','sellers/seller',$data);
 
-        $this->load->view("seller", $data);
+        // $this->load->view("seller", $data);
         
     }
 
