@@ -1,0 +1,66 @@
+.header {
+    color: #36A0FF;
+    font-size: 27px;
+    padding: 10px;
+}
+
+.bigicon {
+    font-size: 35px;
+    color: #36A0FF;
+}
+
+.form-horizontal{
+ /*margin-top: 10%;
+    margin-left: 20%;*/
+    /*border: 1px solid #e2e0db;*/
+    background: white;
+   /* padding: 50px;
+    width: 50%;*/
+}
+
+body {
+ background: #efefef !important;
+}
+
+.center_div{
+    margin: 0 auto;
+    width:80% /* value of your choice which suits your alignment */
+}
+.margin-bottom {
+  margin-bottom: 10%;
+}
+.border-bottom{
+      border-bottom: 1px solid;
+    width: 95%;
+}
+.padding-5{
+  padding: 5px;
+}
+
+.sub-title-dashboard{
+  margin-top: -25px;
+}
+
+.btn-block{
+  width: 40% !important;
+  border-radius: 0 !important;
+  border: 1px solid !important;
+}
+.form-container {
+  width: 50% !important;
+  background: #efefef;
+}
+.fade {
+  opacity: 1 !important;
+}
+
+.modal{
+  opacity: 1 !important;
+  display: block !important;
+}
+.modal-backdrop {
+  background:  #efefef !important;
+}
+.modal-dialog {
+  margin-top: 15% !important;
+}
