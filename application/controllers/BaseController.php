@@ -38,6 +38,17 @@ class BaseController extends CI_Controller {
 			return $BrandList;
 		}
 
+		
+		public function getSellerList() {
+			$SellerData = $this->SelectQuery('sellers',"ID,Name");
+			$SellerList = array();
+			// $whereCondition = array( 'Status' => 1);
+			foreach ($SellerData as $SellerKey => $SellerValue) {
+				$SellerList[$SellerValue->ID] =  $SellerValue->Name;
+			}
+			return $SellerList;
+		}
+
 		// sema class list for dro down
 		public function getSemaClassList() {
 			$SemaClassData = $this->SelectQuery('sema_class',"ID,Name");

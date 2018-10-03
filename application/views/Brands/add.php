@@ -3,7 +3,6 @@
     $ID = (isset($BrandData[0]) && !empty($BrandData[0]->ID)) ?  $BrandData[0]->ID : null;
     $Code = (isset($BrandData[0]) && !empty($BrandData[0]->Code)) ?  $BrandData[0]->Code : '';
     $CreatedDate = (isset($BrandData[0]) && !empty($BrandData[0]->CreatedDate)) ?  $BrandData[0]->CreatedDate : '';
-    // print_r($BrandData);exit;
     $action = (isset($action) && !empty($action))  ? $action : 'add';
 ?>
 <script src="<?php echo base_url(); ?>assests/js/bootstrap.min.js" rel="stylesheet"></script>

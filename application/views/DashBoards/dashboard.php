@@ -75,7 +75,7 @@
               <!-- <button type="button" id="EditBrand" class="btn btn-default btn-block"></button>-->
             </div> 
             <div class="row padding-5">
-                <button type="button" class="btn btn-default btn-block">Associate New Seller</button>
+                <button type="button" id="AssociateSeller" class="btn btn-default btn-block">Associate New Seller</button>
             </div>
             <!-- Reports -->
             <div class="row border-bottom padding-5">
@@ -102,6 +102,14 @@
             $( "#append_brand_form" ).load( "<?php echo base_url().'brands/add'; ?>" );
             $( "#append_brand_form" ).modal( "show" );
         });
+
+          $( "#AssociateSeller" ).click( function() {                     
+            $( "div.modal-backdrop" ).removeClass( "hide" );            
+            $( "div.modal-backdrop" ).addClass( "show" );    
+            $( "#append_brand_form" ).load( "<?php echo base_url().'sellers/AssociateSeller'; ?>" );
+            $( "#append_brand_form" ).modal( "show" );
+        });
+
 
         $("ul#EditBrand li").click( function() {
                 var ID = $(this).attr("value");

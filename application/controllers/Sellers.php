@@ -27,6 +27,15 @@ class Sellers extends BaseController {
         
     }
 
+    public function AssociateSeller() {
+        $BrandList = $this->getBrandList();
+       $SellerList = $this->getSellerList();
+        $data["BrandList"] = $BrandList;
+        $data["SellerList"] = $SellerList;
+        $this->load->view ( 'sellers/associate_seller',$data );
+        // echo "str";exit;
+    }
+
     function get_enum_values($table, $field)
     {
         $type = $this->db->query( "SHOW COLUMNS FROM {$table} WHERE Field = '{$field}'" )->row( 0 )->Type;
