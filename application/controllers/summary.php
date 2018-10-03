@@ -14,6 +14,8 @@ class Summary extends BaseController {
         $id = 1;
         $data["brand_data"] = $this->summary->get_brand_summary_by_id($id);
         $data["seller_list"] = $this->summary->get_associte_seller_list($id);
-        $this->load->view("summary", $data);
+        // $this->template->view("summary", $data);
+        
+		$this->template->load('template','summary',$data);
     }
 }
