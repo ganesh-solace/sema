@@ -18,7 +18,9 @@
     
     <div class="row">
         <div class="col-md-6">
-            
+             <div class="row title-orange">
+                <h3><strong ><?php  echo $BrandData[0]["Name"]; ?></strong></h3>
+            </div>
             <div class="row border-bottom padding-5">
                 <h4><strong>Brand Summary</strong></h4>
             </div>
@@ -28,7 +30,7 @@
                 // echo "<pre>";
                 // print_r($brand_data);
                 // exit;
-                foreach($brand_data as $brand):
+                foreach($BrandData as $brand):
             ?>
                 <div class="col-md-5 padding-5"><span>Associated Date: </span></div><div class="col-md-7 padding-5"><span><?php echo (isset($brand['CreatedDate'])) ? $brand['CreatedDate'] : '-' ?></span></div>
                 
@@ -36,14 +38,15 @@
                 
                 <div class="col-md-5 padding-5"><span>Number of Items: </span></div><div class="col-md-7 padding-5"><span><?php echo (isset($brand['NumberOfItem'])) ? $brand['NumberOfItem'] : '-' ?></span></div>
 
-                <div class="col-md-5 padding-5"><span>SEMA Brand Class: </span></div><div class="col-md-7 padding-5"><span><?php echo (isset($brand['sema_class'])) ? $brand['sema_class'] : '-' ?></span></div>
+                <div class="col-md-5 padding-5"><span>SEMA Brand Class: </span></div><div class="col-md-7 padding-5"><span><?php echo (isset($brand['ClassName'])) ? $brand['ClassName'] : '-' ?></span></div>
                 
-                <div class="col-md-5 padding-5"><span>Associate Sellers: </span></div><div class="col-md-7 padding-5"><span><?php echo (isset($brand['associate_seller_count'])) ? $brand['associate_seller_count'] : '-' ?></span></div>
-
-                <div class="col-md-5 padding-5"><span>Associate Webstores: </span></div><div class="col-md-7 padding-5"><span><b>15</b></span></div>
+ 
             <?php
                 endforeach;
             ?>
+             <div class="col-md-5 padding-5"><span>Associate Sellers: </span></div><div class="col-md-7 padding-5"><span><?php echo (isset($NumberOfAssociateSeller[0]['AssociateSeller'])) ? $NumberOfAssociateSeller[0]['AssociateSeller'] : '-' ?></span></div>
+
+                <div class="col-md-5 padding-5"><span>Associate Webstores: </span></div><div class="col-md-7 padding-5"><span><b>15</b></span></div>
             </div>
             
         </div>
@@ -51,17 +54,15 @@
         <div class="col-md-6 ">
 
             <div class="row border-bottom padding-5">
-                <h4><strong>Associated Seller</strong></h4>
+                <div class="col-md-6"> <h4><strong>Associated Seller</strong></h4></div>
+                <div class="col-md-6 text-right color-blue"><h5>See all <?php echo (isset($NumberOfAssociateSeller[0]['AssociateSeller'])) ? $NumberOfAssociateSeller[0]['AssociateSeller'] : '-' ?>     sellers</h5></div>
             </div>
 
             <div class="row padding-5">
                 <?php
-                    
-                    // $BrandArr = array( "BDS Suspension","Air Lift", "Fuel Offroad", "Backrack","Husky Liners", "Wheathertech", "Pro comp Tires", "Mishimoto", "Yulon Gear");
-
                     if( isset( $seller_list ) && !empty( $seller_list ) ) {
                         foreach ($seller_list as $seller) { ?>
-                            <div class="col-md-4 padding-5"><a href="<?php echo $seller["ID"]; ?>"><?php echo $seller["Name"]; ?></a> </div>
+                            <div class="col-md-4 padding-5"><a class="SellerDisplay" value="<?php echo $seller["ID"]; ?>"><?php echo $seller["Name"]; ?></a> </div>
                             <?php
                         }
                     }
@@ -75,3 +76,25 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+jQuery( document ).ready(function( $ ) {
+    $("a.SellerDisplay").click(function() {
+        var BrandName = "<?php echo $BrandData[0]["Name"]; ?>";
+        var BrandID = "<?php echo $BrandData[0]["ID"]; ?>";
+        var data = {'id': $(this).attr('value'), "BrandName": BrandName,"BrandID":BrandID};
+        var url = "<?php base_url()?>sellers";
+         url_redirect({url:url,  method: "post",data: data});
+    });
+
+     function url_redirect(options){
+        var $form = $("<form />");                 
+        $form.attr("action",options.url);
+        $form.attr("method",options.method);                 
+        for (var data in options.data)
+        $form.append('<input type="hidden" name="'+data+'" value="'+options.data[data]+'" />');                      
+        $("body").append($form);
+        $form.submit();
+    }
+});
+</script>

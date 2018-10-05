@@ -54,7 +54,7 @@ body {
   opacity: 1 !important;
 }
 
-.modal{
+.modal#myModal{
   opacity: 1 !important;
   display: block !important;
 }
@@ -63,4 +63,20 @@ body {
 }
 .modal-dialog {
   margin-top: 15% !important;
+}
+.margin-right-0{  
+    margin-right: 0px;
+}
+.title-orange{
+  color: #f7941e;
+      margin-top: -40px;
+}
+.color-blue{
+      color: #337ab7;
+}
+.margin-top-neg-20{
+      margin-top: -20px;
+}
+.amount-input-style{
+  width: 40px;padding: 0 5px;
 }

@@ -32,6 +32,7 @@ class BaseController extends CI_Controller {
 			$BrandData = $this->SelectQuery('brands',"ID,Name");
 			$BrandList = array();
 			$whereCondition = array( 'Status' => 1);
+			$BrandList[0] = " -- select -- ";
 			foreach ($BrandData as $BrandKey => $BrandValue) {
 				$BrandList[$BrandValue->ID] =  $BrandValue->Name;
 			}
@@ -75,7 +76,8 @@ class BaseController extends CI_Controller {
 		$TrasactionArray['CreatedDate'] = date("Y-m-d H:i:s");   
 		$TrasactionArray['ModifiedDate'] = date("Y-m-d H:i:s");   
 		$TrasactionArray['Status'] = 1;   
-
+		$TrasactionArray['CreatedBy'] = $this->session->userdata['logged_in']['ID'];
+		$TrasactionArray['ModifiedBy'] = $this->session->userdata['logged_in']['ID'];
 		return $TrasactionArray;
 	}
 

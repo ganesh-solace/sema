@@ -24,43 +24,7 @@ class Brands extends BaseController {
 		parent::index();		
 	}
 
-	// add  brand data
-	public function add() {	
-		 if($this->input->method() == 'post') {
-			 $BrandData = $this->input->post();
-			 $BrandPostArr = $this->GenerateBrandPostData( $BrandData );
-			 $this->saveAll($BrandPostArr,$this->parent, $this->child,'BrandID');
-			 redirect("dashboards");
-		 }
-		
-		$SemaClassList = $this->getSemaClassList();
-		$data['SemaClassList'] = $SemaClassList;		
-		$data['PageTitle'] = 'Add Brand';
-		$this->load->view ('brands/add',$data );
-	}
-	
-	// edit brand details
-	public function edit(){
-		$id = $this->input->post()['ID'];
-		$flag = $this->deleteRecords( $id );		
-		if( $flag ) {		
-		   $BrandData = $this->input->post();
-		   $BrandPostArr = $this->GenerateBrandPostData( $BrandData );
-		   $this->updateInsert($BrandPostArr,$this->parent, $this->child, $id );
-		   redirect("dashboards");
-		}		
-	}
-	
-	// update the status in edit case
-	public function deleteRecords( $id ) {
-		$data = array('Status'=>  0 );
-		$where = array("BrandID"=> $id );
-		$this->db->where($where);
-		$flag = $this->db->update('sema_brand_class_bridge', $data);
-		return $flag;
-	}
-
-	// edit post to display data for pop up
+	// form action: edit post to display data for pop up
 	public function editPost() {	
 		if( !empty( $this->input->post() ) ) {
 			$ID = $this->input->post()['ID'];
@@ -75,8 +39,9 @@ class Brands extends BaseController {
 		$this->load->view ('brands/add',$data );
 	}
 
+	// editPost: get the brand details from ID
 	public function getBrandsData( $id ) {		
-		$whereCondition = array( 'B.Status' => 1,'B.ID' => $id);
+		$whereCondition = array( 'B.Status' => 1,'B.ID' => $id );
 		$this->db->select('GROUP_CONCAT(SCB.ClassID) ClassID,B.*');    
 		$this->db->from('brands B');
 		$this->db->join('sema_brand_class_bridge SCB', 'B.ID = SCB.BrandID');	
@@ -86,21 +51,44 @@ class Brands extends BaseController {
 		$query = $this->db->get();
 		$BrandsData = $query->result();
 		return $BrandsData;
-	} 
-
-	// on submit of brands popup form set validation
-	public function ajaxValidation() {
-		$config = $this->Brand->GetTheValidationFields();
-		$this->form_validation->set_rules($config);
-		if( $this->form_validation->run() ==  false ) {
-			$errors = validation_errors();
-				echo json_encode(['error'=>$errors]);
-		} else {
-			echo json_encode("");exit;
-		}
 	}
 
-	// generate brands post data
+	//editPost: edit brand details
+	public function edit(){
+		$id = $this->input->post()['ID'];
+		$flag = $this->deleteRecords( $id );		
+		if( $flag ) {		
+		   $BrandData = $this->input->post();
+		   $BrandPostArr = $this->GenerateBrandPostData( $BrandData );
+		   $this->updateInsert( $BrandPostArr,$this->parent, $this->child, $id );
+		   redirect("dashboards");
+		}		
+	}
+
+	//edit: update the status in edit case
+	public function deleteRecords( $id ) {
+		$data = array('Status'=>  0 );
+		$where = array("BrandID"=> $id );
+		$this->db->where($where);
+		$flag = $this->db->update('sema_brand_class_bridge', $data);
+		return $flag;
+	}
+	//form action: add  brand data
+	public function add() {	
+		 if($this->input->method() == 'post') {
+			 $BrandData = $this->input->post();
+			 $BrandPostArr = $this->GenerateBrandPostData( $BrandData );
+			 $this->saveAll( $BrandPostArr,$this->parent, $this->child,'BrandID' );
+			 redirect("dashboards");
+		 }
+		
+		$SemaClassList = $this->getSemaClassList();
+		$data['SemaClassList'] = $SemaClassList;		
+		$data['PageTitle'] = 'Add Brand';
+		$this->load->view ('brands/add',$data );
+	}
+	
+	//add,edit: generate brands post data
 	public function GenerateBrandPostData( $BrandData ) {
 		$BrandPostArr = array();		
 		if( isset( $BrandData['Code'] ) && !empty( $BrandData['Code'] )) {
@@ -116,28 +104,39 @@ class Brands extends BaseController {
 		$BrandPostArr['Name'] = $BrandData['Name'];
 		$BrandPostArr['Description'] = $BrandData['Description'];
 		$BrandPostArr['Status'] = 1;
-		$BrandPostArr['CreatedDate'] = isset( $BrandData['CreatedDate'] ) ? $BrandData['CreatedDate'] :  $TransactionDetails['CreatedDate'];
+		$BrandPostArr['CreatedDate'] = (isset( $BrandData['CreatedDate'] ) && !empty( $BrandData['CreatedDate'] )) ? $BrandData['CreatedDate'] :  $TransactionDetails['CreatedDate'];
 		$BrandPostArr['ModifiedDate'] = $TransactionDetails['ModifiedDate'];
-		$BrandClassArr = $this->GenerateBrandClassPostData($BrandData['ClassID'], $TransactionDetails, $this->id );
+		$BrandClassArr = $this->GenerateBrandClassPostData( $BrandData['ClassID'], $TransactionDetails, $this->id );
 		$BrandArr = array();
 		$BrandArr[$this->parent] = $BrandPostArr;		
 		$BrandArr[$this->child] = $BrandClassArr;
-
 	
 		return $BrandArr;
 	}
 
-	// generate brands class post database for associated table
+	//GenerateBrandPostData: generate brands class post database for associated table
 	public function GenerateBrandClassPostData($BrandClassData, $TransactionDetails, $id) {
 		$BrandClassArr = array();
 		foreach ($BrandClassData as $BrandDatakey => $BrandDatavalue) {			 
 			$BrandClassArr[$BrandDatakey]['BrandID'] = $id;
 			$BrandClassArr[$BrandDatakey]['ClassID'] = $BrandDatavalue;
 			$BrandClassArr[$BrandDatakey]['CreatedDate'] = $TransactionDetails['CreatedDate'];
-			$BrandClassArr[$BrandDatakey]['ModifiedDate'] = $TransactionDetails['ModifiedDate'];	
+			$BrandClassArr[$BrandDatakey]['ModifiedDate'] = $TransactionDetails['ModifiedDate'];
 			$BrandClassArr[$BrandDatakey]['Status'] = $TransactionDetails['Status'];	
 		}
 			return $BrandClassArr;
+	}
+
+	//Form poup Add & edit Ajax Name :  on submit of brands popup form set validation
+	public function ajaxValidation() {
+		$config = $this->Brand->GetTheValidationFields();
+		$this->form_validation->set_rules( $config );
+		if( $this->form_validation->run() ==  false ) {
+			$errors = validation_errors();
+				echo json_encode(['error'=>$errors]);
+		} else {
+			echo json_encode("");exit;
+		}
 	}
 
 

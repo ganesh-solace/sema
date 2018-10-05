@@ -1,6 +1,7 @@
 
 <header>
     <?php
+
       if( isset( $this->session->userdata ) ) {
         if( isset( $this->session->userdata['logged_in'] ) && !empty( $this->session->userdata['logged_in'] ) ) {
           ?>

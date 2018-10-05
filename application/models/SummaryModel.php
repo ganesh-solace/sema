@@ -9,19 +9,31 @@ class SummaryModel extends CI_Model{
       parent::__construct();
     }    
 
-    function get_brand_summary_by_id($id){
-        $this->db->select("b.*, GROUP_CONCAT(sc.Name) as sema_class, count(bsc.BrandId) as associate_seller_count");
-        $this->db->from("brands b");
-        $this->db->where("b.ID", $id);
-        $this->db->where("sbcb.Status", 1);
-        $this->db->join('sema_brand_class_bridge sbcb', 'b.ID = sbcb.BrandID', 'inner');
-        $this->db->join('sema_class sc', 'sc.ID = sbcb.ClassID', 'inner');
-        $a = $this->db->join('brand_seller_bridge bsc', 'b.ID = bsc.BrandID', 'inner');
+    // Seller Index, Summary Index: generate the brands data 
+    public function getBrandSummaryByID( $id ){
+        $this->db->distinct();
+        $this->db->select("B.*, GROUP_CONCAT(SC.Name) ClassName");
+        $this->db->from("sema_brand_class_bridge SBC");
+        $this->db->join('sema_class SC', 'SC.ID = SBC.ClassID', 'INNER');
+        $this->db->join('brands B', 'SBC.BrandID = B.ID', 'INNER');
+        $this->db->where("SBC.BrandID", $id);
+        $this->db->where("SBC.Status", 1);
         $query = $this->db->get();
         return $query->result_array();
     }
+    
+    public function NumberOfAssociateSeller( $id ) {
+        $this->db->distinct();        
+        $this->db->select("COUNT(BSB.SellerID) AssociateSeller");        
+        $this->db->from("brands B");
+        $a = $this->db->join('`brand_seller_bridge` BSB', 'B.ID = BSB.BrandID', 'inner');
+        $whereCondition = array("B.ID" => $id,"BSB.Status" => 1);
+        $this->db->where($whereCondition);
+         $query = $this->db->get();
+        return $query->result_array();
+    }
 
-    function get_associte_seller_list($id){
+    function getAssociateSellerList( $id ){
         $this->db->select("s.*");
         $this->db->where("bsb.BrandID", $id);
         $this->db->from("sellers s");
@@ -29,4 +41,5 @@ class SummaryModel extends CI_Model{
         $query = $this->db->get();
         return $query->result_array();
     }
+    
 }

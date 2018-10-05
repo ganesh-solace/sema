@@ -9,13 +9,11 @@ class Summary extends BaseController {
     }
 
     public function index() {
-        parent::index();
-        $data = array();
-        $id = 1;
-        $data["brand_data"] = $this->summary->get_brand_summary_by_id($id);
-        $data["seller_list"] = $this->summary->get_associte_seller_list($id);
-        // $this->template->view("summary", $data);
+        $id = $this->input->post()["id"];
+        $data["BrandData"] = $this->summary->getBrandSummaryByID( $id );
+        $data["seller_list"] = $this->summary->getAssociateSellerList( $id );        
+        $data["NumberOfAssociateSeller"] = $this->summary->NumberOfAssociateSeller( $id );
+        $this->template->load('template','summary',$data);	
         
-		$this->template->load('template','summary',$data);
     }
 }
