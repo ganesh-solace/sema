@@ -80,3 +80,30 @@ body {
 .amount-input-style{
   width: 40px;padding: 0 5px;
 }
+.login-nav-bar{
+  width: 95%;
+  z-index: 99999;
+  padding: 10px 0px 10px 0px;
+}
+#EditBrand {
+      padding: 10px 25px 10px 25px;
+}
+.table-container {
+    margin: 5px;
+        border: 1px solid #d6cdcd;
+}
+.row.head-row {
+    padding: 5px;
+    background: #757171;
+    margin: 0;
+    color: #ffffff;
+        line-height: 30px;
+}
+.cell-border{
+      border-right: 1px solid #d6cdcd;
+}
+.row-border{
+border-bottom: 1px solid #d6cdcd;
+margin: 0;
+    line-height: 30px;
+}

@@ -7,7 +7,10 @@ class BaseController extends CI_Controller {
     	parent::__construct();     
 		$this->load->helper(array('url','html','form'));
 		$this->load->library('template');
-
+		$this->load->library(array('form_validation','session'));;
+		if( !isset( $this->session->userdata['logged_in'] ) && empty( $this->session->userdata['logged_in'] )) {
+			redirect("users");
+		}
     }
 	
 

@@ -24,6 +24,23 @@ class Brands extends BaseController {
 		parent::index();		
 	}
 
+	public function View() {				
+		$this->load->library('pagination');	
+		$data['PageTitle'] = 'View All Brands';	
+		$num_rows=$this->db->count_all("brands");
+		$query = $this->db->where('Status', '1')->get('brands');
+		$num_rows = $query->num_rows();
+		$limit = 2;
+			$whereCondition = array("Status"=>1);
+			$orderBy = array('field'=>"Name",'Type'=>"ASC");
+			$data['BrandData'] =$this->SelectQuery('brands','ID,Code,Name,Description', $whereCondition,null, $orderBy);
+		
+				$data["TotalRecords"] = $num_rows;
+				$total_pages = ceil($num_rows / $limit); 
+				// $data["TotalRecords"] = $total_pages;
+		$this->load->view ('brands/view', $data );
+	}
+
 	// form action: edit post to display data for pop up
 	public function editPost() {	
 		if( !empty( $this->input->post() ) ) {

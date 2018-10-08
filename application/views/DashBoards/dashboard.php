@@ -92,7 +92,7 @@
                 <h4><strong>Reports</strong></h4>
             </div>
             <div class="row padding-5">
-                <a href="/brands"> View all brands </a>
+                <a id="ViewAllBrands" > View all brands </a>
             </div>
             <div class="row padding-5">
                 <a href="/brands"> Most popular brands </a>
@@ -132,6 +132,12 @@
             $( "#append_brand_form" ).modal( "show" );
         });
 
+        $("#ViewAllBrands").click( function() {
+            $( "div.modal-backdrop" ).removeClass( "hide" );            
+            $( "div.modal-backdrop" ).addClass( "show" );    
+            $( "#append_brand_form" ).load( "<?php echo base_url().'brands/View'; ?> " );
+            $( "#append_brand_form" ).modal( "show" );
+        });
         // on click if recent brand 
         $("a.BrandName").click(function() {
             var data = {'id': $(this).attr('value')};

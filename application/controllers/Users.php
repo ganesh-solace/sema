@@ -9,17 +9,19 @@
 
 
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-include('BaseController.php');
+// include('BaseController.php');
 
-class Users extends BaseController {
+class Users extends CI_Controller {
 
 	public function __construct(){
-		parent::__construct();
+		parent::__construct();     
+		$this->load->helper(array('url','html','form'));
+		$this->load->library('template');
+		$this->load->library(array('form_validation','session'));
 		$this->load->model('User');
 	}
 
 	public function index() {
-		parent::index();		
 		$this->template->load('template','users/login');
 	}
 
@@ -71,4 +73,27 @@ class Users extends BaseController {
 		redirect('dashboards');
 	}
 
+	// Select statemtnt with feilds, wherecondition and limit	
+	  public function SelectQuery($table, $fields, $whereCondition = null, $limit = null, $orderBy = null ) {
+			$this->db->select( $fields );
+			$this->db->from( $table );
+			if( !empty( $whereCondition ) ) $this->db->where( $whereCondition );  
+			if( !empty( $orderBy ) ) $this->db->order_by($orderBy['field'], $orderBy['Type']);  
+			
+			if( !empty( $limit ) )  $this->db->limit($limit);   
+			
+
+			$query = $this->db->get();
+			$query = $query->result();
+			return $query;
+	}
+	
+	// session logout
+	public function logout() {
+		if( isset( $this->session->userdata['logged_in'] )) {
+			$this->session->sess_destroy();
+			redirect("users");
+		}
+	
+	}
 }
