@@ -9,7 +9,9 @@ class Summary extends BaseController {
     }
 
     public function index() {
-        $id = $this->input->post()["id"];
+        //  unset($_SESSION["summary"]);
+        $id = isset( $_SESSION["summary"] ) ? $_SESSION["summary"]["BrandID"] : $this->input->post()["id"];
+        
         $data["BrandData"] = $this->summary->getBrandSummaryByID( $id );
         $data["seller_list"] = $this->summary->getAssociateSellerList( $id );        
         $data["NumberOfAssociateSeller"] = $this->summary->NumberOfAssociateSeller( $id );
