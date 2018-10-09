@@ -4,7 +4,7 @@
         
             <!-- just part logo  -->
             <div class="row margin-bottom padding-5">
-                <img src="<?php echo base_url(); ?>assests/images/JustParts-Logo.png">
+                <img src="<?php echo base_url(); ?>assests/images/JustParts-Logo.jpg">
             </div>
              <div class="row title-orange padding-5">
                 <h3><strong ><?php echo $BrandName;?></strong></h3>

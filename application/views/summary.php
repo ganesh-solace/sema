@@ -5,7 +5,7 @@
         <div class="col-md-6">
             <!-- just part logo  -->
             <div class="row margin-bottom padding-5">
-                <img src="<?php echo base_url(); ?>assests/images/JustParts-Logo.png">
+                <img src="<?php echo base_url(); ?>assests/images/JustParts-Logo.jpg">
             </div>
         </div>
         <div class="col-md-6">

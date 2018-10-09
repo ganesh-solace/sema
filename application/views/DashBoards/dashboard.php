@@ -4,7 +4,7 @@
         <div class="col-md-6">
             <!-- just part logo  -->
             <div class="row margin-bottom padding-5">
-                <img src="<?php echo base_url(); ?>assests/images/JustParts-Logo.png" />
+                <img src="<?php echo base_url(); ?>assests/images/JustParts-Logo.jpg" />
             </div>
             <!--  dashboard group -->
             <div class="row  border-bottom padding-5">
@@ -12,7 +12,7 @@
             </div>
             <div class="row padding-5"><span>134</span><span>Data files</span></div>
             <div class="row padding-5"><span>3</span><span>sellers link to data feeds</span></div>
-            <div class="row padding-5"><span>XXXXXXX</span></div>
+            <!-- <div class="row padding-5"><span>XXXXXXX</span></div> -->
             
             <!-- Recdent group -->
             <div class="row border-bottom padding-5">
@@ -98,7 +98,7 @@
                 <a href="/brands"> Most popular brands </a>
             </div>
             <div class="row padding-5">
-                <a href="/brands"> XXXXX </a>
+                <!-- <a href="/brands"> XXXXX </a> -->
             </div>
         </div>
     </div>

@@ -1,7 +1,6 @@
 
 <div class="container">
-    <div class="col-md-6" style="    margin-left: 271px;
-    margin-top: 150px;">
+    <div class="col-md-6 login-panel" >
         <div class="col-md-12">
             <div class="well well-sm">
                 <form class="form-horizontal" method="post" action="<?php echo base_url(); ?>users/login"> 
@@ -23,6 +22,7 @@
                             </div>
                         </div>
                         <div class="form-group">  
+                        <?php $class = isset( $class ) ? $class : ""; ?>
                              <div class="col-sm-offset-2 row <?php echo $class; ?>">
                                     <?php echo isset($error_message) ? $error_message : ""; ?>
                             </div> 

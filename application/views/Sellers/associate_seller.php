@@ -119,5 +119,21 @@
                 $( "div.modal-backdrop" ).addClass( "hide" );            
                 $( "#append_brand_form" ).html("");
         });
+
+        $("#FormSubmit").click(function( e ) {            
+            var SellerID = jQuery("#SellerMultiSelect").val();
+            if(jQuery(".append-div").length > 0 ) jQuery(".append-div").remove();
+            if(!$.isEmptyObject({ SellerID })) {
+                if(SellerID.length < 1 ) {
+                    e.preventDefault();
+                    jQuery("#SellerMultiSelect").parents(".row").after('<div class="append-div row text-right margin-right-0"><label class="text-danger"> Seller is required. </label></div>');
+                } 
+            } 
+             if( jQuery("#BrandDropDown").val() == 0 || jQuery("#BrandDropDown").val() == "" ) {
+                 e.preventDefault();
+                jQuery("#BrandDropDown").parents(".row").after('<div class="append-div row text-right margin-right-0"><label class="text-danger"> Brand name required. </label></div>');
+            } 
+            $("#FormSubmit").submit();
+        });
     });    
         </script>
