@@ -48,7 +48,8 @@ class Users extends CI_Controller {
 				
 			} else {
 				$data = array(
-						'error_message' => 'Invalid Username or Password'
+						'error_message' => 'Invalid Username or Password',
+						"class" => "text-danger"
 				);
 				$this->template->load('template','users/login', $data);
 

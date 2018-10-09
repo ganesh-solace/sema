@@ -128,9 +128,9 @@
                     data: FormData,
                     success: function(data) {
                        if( !$.isEmptyObject(data)) {
-                            $("#BrandName").after('<div class="error">'+data.error+'</div>');
+                            $("#BrandName").after('<div class="text-danger">'+data.error+'</div>');
                        }  else {
-                           if( $(".error").length > 0 ) $("div.error").remove(); 
+                           if( $(".error").length > 0 ) $("div.text-danger").remove(); 
                             $("#BrandAdd").submit();
                        }
                     }
