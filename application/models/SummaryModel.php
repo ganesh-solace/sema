@@ -35,7 +35,9 @@ class SummaryModel extends CI_Model{
 
     function getAssociateSellerList( $id ){
         $this->db->select("s.*");
-        $this->db->where("bsb.BrandID", $id);
+        $whereCondition = array("bsb.BrandID" => $id,"bsb.Status" => 1);
+        // $this->db->where("bsb.BrandID", $id);
+        $this->db->where( $whereCondition );
         $this->db->from("sellers s");
         $a = $this->db->join('brand_seller_bridge bsb', 's.ID = bsb.SellerID', 'inner');
         $query = $this->db->get();

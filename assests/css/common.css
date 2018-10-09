@@ -36,7 +36,9 @@ body {
 .padding-5{
   padding: 5px;
 }
-
+.padding-20{
+  padding: 20px;
+}
 .sub-title-dashboard{
   margin-top: -25px;
 }

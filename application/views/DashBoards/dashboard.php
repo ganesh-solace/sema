@@ -118,7 +118,7 @@
           $( "#AssociateSeller" ).click( function() {                     
             $( "div.modal-backdrop" ).removeClass( "hide" );            
             $( "div.modal-backdrop" ).addClass( "show" );    
-            $( "#append_brand_form" ).load( "<?php echo base_url().'sellers/AssociateSeller'; ?>" );
+            $( "#append_brand_form" ).load( "<?php echo base_url().'sellers/AssociateSellerDashboard'; ?>" );
             $( "#append_brand_form" ).modal( "show" );
         });
 

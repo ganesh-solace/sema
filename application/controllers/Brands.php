@@ -78,7 +78,7 @@ class Brands extends BaseController {
 		   $BrandData = $this->input->post();
 		   $BrandPostArr = $this->GenerateBrandPostData( $BrandData );
 		   $this->updateInsert( $BrandPostArr,$this->parent, $this->child, $id );
-		   redirect("dashboards");
+		   redirect("DashBoards");
 		}		
 	}
 
@@ -96,7 +96,7 @@ class Brands extends BaseController {
 			 $BrandData = $this->input->post();
 			 $BrandPostArr = $this->GenerateBrandPostData( $BrandData );
 			 $this->saveAll( $BrandPostArr,$this->parent, $this->child,'BrandID' );
-			 redirect("dashboards");
+			 redirect("DashBoards");
 		 }
 		
 		$SemaClassList = $this->getSemaClassList();

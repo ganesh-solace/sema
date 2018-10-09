@@ -1,7 +1,3 @@
-  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"> -->
-  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script> -->
 <script src="<?php echo base_url(); ?>assests/js/bootstrap.min.js" rel="stylesheet"></script>
 <script src="<?php echo base_url(); ?>assests/js/pagination.min.js" rel="stylesheet"></script>
 <?php $datasource = json_encode($BrandData);
@@ -28,12 +24,16 @@ print_r($datasource);
 
             </div> 
             <div class="row text-right margin-right-0"><a>Total records <?php echo $TotalRecords; ?></a></div>
+            <div class="row">
+            <div class='col-md-8'>
             <nav aria-label="Page navigation example" class="example">
-                <!-- <ul class="pagination">
-                   <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                </ul> -->
-               
-            </nav>               
+            </nav>
+            </div>
+            <div class="col-md-4 text-right padding-20">
+                <?php  $ButtonExtra = array( 'class' => 'btn btn-default',"data-dismiss"=> "modal","id" => 'ModalClose');
+                        echo form_button('Close','Close', $ButtonExtra);?>   
+            </div>
+            </div>            
               </div>
             </div>
         </div>
@@ -43,21 +43,19 @@ print_r($datasource);
 
 <script type="text/javascript">
    jQuery( document ).ready(function( $ ) {
-    var datasource = <?php echo $datasource;?>;
-    console.log(datasource);
-    $('.example').pagination({
-    dataSource: datasource,
-    pageSize: 2,
-    showPrevious: true,
-    ulClassName : "pagination",
-    showNext: true,
-    callback: function(data, pagination) {
-        console.log(data);
-        // template method of yourself
-        var html = template( data );
-        $(".body-row").html(html);
-    }
-});
+        var datasource = <?php echo $datasource;?>;
+        $('.example').pagination({
+            dataSource: datasource,
+            pageSize: 2,
+            showPrevious: true,
+            ulClassName : "pagination",
+            showNext: true,
+            callback: function(data, pagination) {
+                // template method of yourself
+                var html = template( data );
+                $(".body-row").html(html);
+            }
+        });
 
 function template( data ){
     var html ="";
@@ -70,6 +68,16 @@ function template( data ){
     });
     return html;
 }
+
+
+        // on click of close button exit the modal popup
+        $( "#ModalClose" ).click( function() {
+            $( "#append_brand_form" ).modal( 'hide' );
+            $( "div.modal-backdrop" ).removeClass( "show" );            
+            $( "div.modal-backdrop" ).addClass( "hide" );            
+            $( "#append_brand_form" ).html("");
+        });
+        
     //click on brand code redirect to brand summary 
     $(document).on("click","a.BrandCode",function() {
             var data = {'id': $(this).attr('value')};

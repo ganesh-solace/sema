@@ -11,7 +11,7 @@
             <div class="modal-body">
             <?php
                   $attributes = array( 'id' => 'AssociateSeller');
-                    echo form_open('sellers/AssociateSeller', $attributes);
+                    echo form_open('sellers/'.$action, $attributes);
 
             ?>
             <div class="form-group">
@@ -21,9 +21,11 @@
                     </div>
                     <div class="col-md-6">
                         <?php    
-                        $BrandAttr = array('id'       => 'BrandDropDown','class'=> 'form-control');         
-                    
-                        echo form_dropdown('BrandID', $BrandList,"", $BrandAttr); ?>
+                        $BrandAttr = array('id'       => 'BrandDropDown','class'=> 'form-control');
+                        $BrandID = isset( $BrandID ) ? $BrandID : 0 ;
+                        echo form_dropdown('BrandID', $BrandList,$BrandID, $BrandAttr); ?>
+                        <input type="hidden" name="BrandID", id="InputBrandID" value="<?php echo $BrandID; ?>" />
+
                     </div>
                 </div>
             </div>
@@ -69,12 +71,22 @@
             selectAll: true
         });
 
+        var BrandID = "<?php echo $BrandID; ?>";
+        if( BrandID != 0  ) {
+            $("#BrandDropDown").prop("disabled", true);
+        }
         // if value is deafult selected display the respective seller
-        MultiSellerCheckSelect($("#BrandDropDown").val());
+        MultiCheckAjaxCall($("#BrandDropDown").val());
 
         // change the brands and dislay the default seller selected
         $("select#BrandDropDown").change(function() {
-            var data = {"BrandID" : $(this).val() };
+            $("#InputBrandID").val($(this).val());
+             MultiCheckAjaxCall( $("#BrandDropDown").val() );
+        });
+
+        // common ajax call for document ready and on change of brand  drop down        
+        function MultiCheckAjaxCall( BrandID ) {
+             var data = {"BrandID" : BrandID };
             $.ajax({
                 url: "<?php echo base_url();?>"+"sellers/AjaxgetSellerID",
                 type: 'POST',                    
@@ -89,8 +101,7 @@
                     }                        
                 }
             });
-        });
-
+        }
         // default check the checkbox in multi-select drop downlist
         function MultiSellerCheckSelect( SellerID ) {
              var selectedOptions = SellerID.split(",");

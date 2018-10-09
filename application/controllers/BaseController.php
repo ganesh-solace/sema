@@ -9,7 +9,7 @@ class BaseController extends CI_Controller {
 		$this->load->library('template');
 		$this->load->library(array('form_validation','session'));;
 		if( !isset( $this->session->userdata['logged_in'] ) && empty( $this->session->userdata['logged_in'] )) {
-			redirect("users");
+			redirect(base_url());
 		}
     }
 	

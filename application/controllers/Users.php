@@ -70,7 +70,7 @@ class Users extends CI_Controller {
 		}
 
 		$this->session->set_userdata('logged_in', $SessionData);
-		redirect('dashboards');
+		redirect('DashBoards');
 	}
 
 	// Select statemtnt with feilds, wherecondition and limit	

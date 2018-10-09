@@ -100,23 +100,45 @@ class Sellers extends BaseController {
         echo json_encode( $data );exit;
     }
 
-    //Form action Associate seller page: display associate seller pop up form and save functionality
-    public function AssociateSeller() {
-         if($this->input->method() == 'post') {
-            $SellerData = $this->input->post();
-            $this->deleteRecordsForBrandID( $SellerData["BrandID"] );
-            
-            $SellerPostDataArr = $this->GenerateBrandSellerBridgeData( $SellerData );
-             $flag= $this->db->insert_batch( 'brand_seller_bridge' , $SellerPostDataArr );     
-             redirect("dashboards");          
+    //Form action Associate seller page: display associate seller pop up form on dashboard and save functionality
+    public function AssociateSellerDashboard() {
+         if( $this->input->method() == 'post' && ( !isset( $this->input->post()['action'] ) ) ) {
+            $this->AssociateSellerSave( $this->input->post() );
+             redirect("DashBoards");          
          }
-         
-        $BrandList = $this->getBrandList();
+          $data = $this->loadAssociateSellerTemplateData( 'AssociateSellerDashboard' );
+       $this->load->view ( 'sellers/associate_seller',$data );
+        
+    }
+
+    //Form action Associate seller page : display associate seller pop up form on summary page and save functionality
+       public function AssociateSellerSummary() {
+         if( $this->input->method() == 'post' && ( !isset( $this->input->post()['action'] ) ) ) {
+            $this->AssociateSellerSave( $this->input->post() );
+            $_SESSION["summary"]["BrandID"] = $this->input->post()["BrandID"];
+             redirect("summary");          
+         }
+         $data = $this->loadAssociateSellerTemplateData( "AssociateSellerSummary" );
+
+        $data["BrandID"] = ($this->input->method() == 'post' ) ? $this->input->post()["BrandID"] : 0 ;
+       $this->load->view ( 'sellers/associate_seller',$data );
+        
+    }
+
+    public function loadAssociateSellerTemplateData( $action ) {
+         $BrandList = $this->getBrandList();
         $SellerList = $this->getSellerList();
         $data["BrandList"] = $BrandList;
         $data["SellerList"] = $SellerList;
-        $this->load->view ( 'sellers/associate_seller',$data );
-        
+        $data["action"] = $action;
+        return $data;
+    }
+
+    public function AssociateSellerSave( $SellerData ) {           
+        $this->deleteRecordsForBrandID( $SellerData["BrandID"] );            
+        $SellerPostDataArr = $this->GenerateBrandSellerBridgeData( $SellerData );
+        $flag= $this->db->insert_batch( 'brand_seller_bridge' , $SellerPostDataArr );
+        return true;
     }
 
     //AssociateSeller: if alreay brandID is in database then update the status of previous records

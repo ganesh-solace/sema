@@ -1,4 +1,6 @@
 <div class="container panel panel-body">
+    <div id="append_brand_form" tabindex="-1" role="dialog" data-toggle="modal" data-backdrop="static" data-keyboard="false" aria-labelledby="myModalLabel" data-target="#myModal"></div>
+
     <div class="row">
         <div class="col-md-6">
             <!-- just part logo  -->
@@ -70,7 +72,7 @@
             </div>
 
             <div class="row padding-5">
-                <button>Associate New Seller</button>
+                <button type="button" id="AssociateSeller" class="btn btn-default btn-block">Associate New Seller</button>
             </div>
 
         </div>
@@ -96,5 +98,15 @@ jQuery( document ).ready(function( $ ) {
         $("body").append($form);
         $form.submit();
     }
+
+     // open the asscoiate seller pop up
+          $( "#AssociateSeller" ).click( function() {   
+             var BrandID = "<?php echo $BrandData[0]["ID"]; ?>";     
+             var BrandData = { "BrandID" : BrandID, "action" : "summary" };             
+            $( "div.modal-backdrop" ).removeClass( "hide" );            
+            $( "div.modal-backdrop" ).addClass( "show" );    
+            $( "#append_brand_form" ).load( "<?php echo base_url().'sellers/AssociateSellerSummary'; ?> " , BrandData );
+            $( "#append_brand_form" ).modal( "show" );
+        });
 });
 </script>
