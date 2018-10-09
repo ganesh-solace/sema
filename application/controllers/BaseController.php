@@ -32,9 +32,10 @@ class BaseController extends CI_Controller {
     }
 
 		public function getBrandList() {
-			$BrandData = $this->SelectQuery('brands',"ID,Name");
-			$BrandList = array();
 			$whereCondition = array( 'Status' => 1);
+			$BrandData = $this->SelectQuery('brands',"ID,Name",$whereCondition);
+			$BrandList = array();
+			
 			$BrandList[0] = " -- select -- ";
 			foreach ($BrandData as $BrandKey => $BrandValue) {
 				$BrandList[$BrandValue->ID] =  $BrandValue->Name;
@@ -42,6 +43,17 @@ class BaseController extends CI_Controller {
 			return $BrandList;
 		}
 
+		public function getRecentBrandList() {			
+			$BrandList = array();
+			$whereCondition = array( 'Status' => 1);
+			$orderBy = array( "field" => "LastDataRefresh",  "Type" => "DESC");
+			$BrandData = $this->SelectQuery('brands',"ID,Name", $whereCondition, "", $orderBy);
+			$BrandList[0] = " -- select -- ";
+			foreach ($BrandData as $BrandKey => $BrandValue) {
+				$BrandList[$BrandValue->ID] =  $BrandValue->Name;
+			}
+			return $BrandList;
+		}
 		
 		public function getSellerList() {
 			$SellerData = $this->SelectQuery('sellers',"ID,Name");

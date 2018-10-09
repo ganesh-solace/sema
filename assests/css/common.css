@@ -61,7 +61,8 @@ body {
   display: block !important;
 }
 .modal-backdrop {
-  background:  #efefef !important;
+  /* background: transparent !important; */
+  opacity: 0.1 !important;
 }
 .modal-dialog {
   margin-top: 15% !important;
@@ -121,4 +122,7 @@ margin: 0;
 .login-panel {
     margin-left: 271px;
     margin-top: 150px;
+}
+a,select,li,option,.cursor{
+  cursor: pointer !important;
 }

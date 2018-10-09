@@ -18,9 +18,10 @@ class Sellers extends BaseController {
 
         // unset($_SESSION["seller"]);
         $data["ExistingData"] = $this->getExistingPriceAdjustmentData( $id, $BrandID);
+        $data["DataFeed"] = $this->JPDataFedd( $id, $BrandID)[0]->DataFeed;
         $data["BrandData"] = $this->Summary->getBrandSummaryByID( $BrandID );
         $data['SellerData'] = $this->GetSellerData( $id );   
-
+        // echo "<pre>";print_r($data);exit;
 		$this->template->load('template','sellers/seller',$data);        
     }
 
@@ -30,6 +31,14 @@ class Sellers extends BaseController {
         $BridgeDataResult = $this->SelectQuery('brand_price_adjustment_bridge', "*",$whereCondition);
 
         return $BridgeDataResult;
+    }
+
+    // get the DataFeed file name 
+    public function JPDataFedd( $SellerID, $BrandID ) {
+         $whereCondition = array("SellerID" => $SellerID, "BrandID" => $BrandID, "Status" => 1 );
+        $DataFeed = $this->SelectQuery('brand_seller_bridge', "DataFeed", $whereCondition ) ;
+
+        return $DataFeed;
     }
 
     //Index: get seller data for seller dashboard

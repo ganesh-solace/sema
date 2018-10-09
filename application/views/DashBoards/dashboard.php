@@ -10,8 +10,8 @@
             <div class="row  border-bottom padding-5">
                 <h4><strong>Dashboard</strong></h4>
             </div>
-            <div class="row padding-5"><span>134</span><span>Data files</span></div>
-            <div class="row padding-5"><span>3</span><span>sellers link to data feeds</span></div>
+            <div class="row padding-5"><span>134</span><span> Data files</span></div>
+            <div class="row padding-5"><span>3</span><span> sellers link to data feeds</span></div>
             <!-- <div class="row padding-5"><span>XXXXXXX</span></div> -->
             
             <!-- Recdent group -->
@@ -19,13 +19,11 @@
                 <h4><strong>Recent</strong></h4>
             </div>
             <div class="row">
-                <?php
-                  $BrandArr = array( "BDS Suspension","Air Lift", "Fuel Offroad", "Backrack","Husky Liners", "Wheathertech", "Pro comp Tires", "Mishimoto", "Yulon Gear");
-            
-                     if( isset( $BrandList ) && !empty( $BrandList ) ) {
-                        foreach ($BrandList as $Brandkey => $Brandvalue) {
+                <?php            
+                     if( isset( $RecentBrandList ) && !empty( $RecentBrandList ) ) {
+                        foreach ($RecentBrandList as $Brandkey => $Brandvalue) {
                             if($Brandkey != 0 ) { ?>
-                              <div class="col-md-4 padding-5">
+                              <div class="col-md-4 padding-5 cursor">
                                   <a value="<?php echo $Brandkey; ?>" class="BrandName"><?php echo $Brandvalue; ?></a> 
 
                               </div>
@@ -70,7 +68,7 @@
             </div>
             <div class="row padding-5">
                     <button class="btn btn-default btn-block btn dropdown-toggle" data-toggle="dropdown">Edit Brand <span class = "caret pull-right"></span></button>
-                    <ul class="dropdown-menu" style="width:40%" id="EditBrand">
+                    <ul class="dropdown-menu" style="width:45%" id="EditBrand">
                     <?php if( isset( $BrandList ) && !empty( $BrandList )){
                         foreach ($BrandList as $Brandkey => $Brandvalue) {
                             if($Brandkey != 0) { ?>

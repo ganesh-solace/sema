@@ -21,7 +21,9 @@ class DashBoards extends BaseController {
 	public function index() {
 		parent::index();	
 		$BrandList = $this->getBrandList();	
+		$RecentBrandList = $this->getRecentBrandList();
 		$data['BrandList'] = $BrandList;
+		$data['RecentBrandList'] = $RecentBrandList;
 		$this->template->load('template','dashboards/dashboard',$data);
 	}
 

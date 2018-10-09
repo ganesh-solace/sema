@@ -1,7 +1,6 @@
 <script src="<?php echo base_url(); ?>assests/js/bootstrap.min.js" rel="stylesheet"></script>
 <script src="<?php echo base_url(); ?>assests/js/pagination.min.js" rel="stylesheet"></script>
 <?php $datasource = json_encode($BrandData);
-print_r($datasource);
 ?>
 <div id="myModal" class="modal fade" role="dialog">
     <div class="modal-dialog">

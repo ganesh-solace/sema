@@ -9,6 +9,16 @@ class SummaryModel extends CI_Model{
       parent::__construct();
     }    
 
+    public function lastDataRefresh( $id ) {
+        $whereCondition = array( "Status" => 1, "ID" => $id );
+        $this->db->select( "LastDataRefresh" );  
+        $this->db->from( "brands" );
+        $this->db->where( $whereCondition );
+        $query = $this->db->get();
+        
+        return $query->result_array();
+    }
+
     // Seller Index, Summary Index: generate the brands data 
     public function getBrandSummaryByID( $id ){
         $this->db->distinct();
@@ -43,5 +53,6 @@ class SummaryModel extends CI_Model{
         $query = $this->db->get();
         return $query->result_array();
     }
+
     
 }

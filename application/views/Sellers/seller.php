@@ -79,16 +79,16 @@
             <div class="row padding-5">
                 <div class="col-md-5 padding-5"><span>Price Adjustment: </span></div>
                 <div class="col-md-7 padding-5"><span><a href="javascript:void(0)" data-toggle="modal" data-target="#exampleModalCenter">Create</a></span></div>
+                <!-- <div class="col-md-5 padding-5"><span>xxxx </span></div>
                 <div class="col-md-5 padding-5"><span>xxxx </span></div>
-                <div class="col-md-5 padding-5"><span>xxxx </span></div>
-                <div class="col-md-5 padding-5"><span>xxxx </span></div>
+                <div class="col-md-5 padding-5"><span>xxxx </span></div> -->
             </div>
 
             <div class="row border-bottom padding-5">
                 <h4><strong>JustParts Data Field Details</strong></h4>
             </div>
             <div class="row padding-5">
-                <div class="col-md-5 padding-5"><span>Data Feed Name: </span></div><div class="col-md-7 padding-5"><span>sema_bds-suspension.csv</span></div>
+                <div class="col-md-5 padding-5"><span>Data Feed Name: </span></div><div class="col-md-7 padding-5"><span><?php echo (isset( $DataFeed ) && !empty( $DataFeed )) ? $DataFeed : "-"; ?></span></div>
                 <div class="col-md-5 padding-5"><span>Last Success Import: </span></div><div class="col-md-7 padding-5"><span>September 5, 2018 at 10:58:04 AM</span></div>
             </div>
 
