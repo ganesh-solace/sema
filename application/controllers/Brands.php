@@ -119,6 +119,7 @@ class Brands extends BaseController {
 		$this->id = $BrandPostArr['ID'];
 		$BrandPostArr['Code'] = $Code;
 		$BrandPostArr['Name'] = $BrandData['Name'];
+		$BrandPostArr['SemaBrandAlias'] = $BrandData['SemaBrandAlias'];
 		$BrandPostArr['Description'] = $BrandData['Description'];
 		$BrandPostArr['Status'] = 1;
 		$BrandPostArr['CreatedDate'] = (isset( $BrandData['CreatedDate'] ) && !empty( $BrandData['CreatedDate'] )) ? $BrandData['CreatedDate'] :  $TransactionDetails['CreatedDate'];

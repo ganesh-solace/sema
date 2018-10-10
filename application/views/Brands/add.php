@@ -39,6 +39,20 @@
                         </div>
                     </div>
                 </div>
+                  <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <?php echo form_label('Sema Brand Alias :','SemaBrandAlias'); ?>
+                        </div>
+                        <div class="col-md-6">
+                            <?php 
+                            $SemaBrandAlias =  isset($BrandData[0]) && !empty($BrandData[0]) ? $BrandData[0]->SemaBrandAlias : "";
+                            $SemaBrandAliasAttribute = array( 'name' => 'SemaBrandAlias','id' => 'SemaBrandAlias','class'=> "form-control", "value" => $SemaBrandAlias);
+                            echo form_input($SemaBrandAliasAttribute); ?>
+                            <?php echo form_error('Sema Brand Alias'); ?>
+                        </div>
+                    </div>
+                </div>
                 <div class="form-group">
                     <div class="row">
                         <div class="col-md-6">
