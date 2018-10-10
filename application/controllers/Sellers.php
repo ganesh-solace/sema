@@ -17,12 +17,31 @@ class Sellers extends BaseController {
         $data["BrandName"] = ( isset( $_SESSION["seller"] ) && !empty( $_SESSION["seller"] )) ? $_SESSION["seller"]["BrandName"] : $this->input->post()['BrandName'];
 
         // unset($_SESSION["seller"]);
-        $data["ExistingData"] = $this->getExistingPriceAdjustmentData( $id, $BrandID);
+        $data["ExistingData"] = $this->getExistingPriceAdjustmentData( $id, $BrandID );
         $data["DataFeed"] = $this->JPDataFedd( $id, $BrandID)[0]->DataFeed;
         $data["BrandData"] = $this->Summary->getBrandSummaryByID( $BrandID );
+        $data["LastDataRefresh"] = $this->Summary->lastDataRefresh( $BrandID )[0];
         $data['SellerData'] = $this->GetSellerData( $id );   
-        // echo "<pre>";print_r($data);exit;
+        $data['Last15ImportData'] = $this->GetLastImportHistory15( $id, $BrandID );
+         $LastSuccessImportHistory = $this->LastSuccessImportHistory( $id, $BrandID );
+         $data['LastSuccessImportHistory'] = ( isset( $LastSuccessImportHistory ) && !empty( $LastSuccessImportHistory )) ? $LastSuccessImportHistory[0] : ""; 
 		$this->template->load('template','sellers/seller',$data);        
+    }
+
+    public function LastSuccessImportHistory( $SellerID, $BrandID ) {
+         $whereCondition = array("BrandID" => $BrandID, "SellerID" => $SellerID, "Status" => 1);
+         $orderBy = array('field' => "LastSuccessImport,ID", "Type" => "DESC");
+        $LastSuccessImportData = $this->SelectQuery('seller_brands_jp_update_data', "LastSuccessImport",$whereCondition,1, $orderBy);
+
+        return $LastSuccessImportData;    
+    }
+
+    public function GetLastImportHistory15( $SellerID, $BrandID ) {
+         $whereCondition = array("BrandID" => $BrandID, "SellerID" => $SellerID, "Status" => 1);
+         $orderBy = array('field' => "LastSuccessImport,ID", "Type" => "DESC");
+        $Last15ImportData = $this->SelectQuery('seller_brands_jp_update_data', "LastSuccessImport",$whereCondition,15, $orderBy);
+
+        return $Last15ImportData;    
     }
 
     // Index: get existing data from adjustment table

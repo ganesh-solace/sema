@@ -54,7 +54,16 @@
                     ?>                    
                 
                 <div class="col-md-5 padding-5"><span>Associated Date: </span></div><div class="col-md-7 padding-5"><span><?php echo $AssociateDate; ?></span></div>
-                <div class="col-md-5 padding-5"><span>Last Data Refresh: </span></div><div class="col-md-7 padding-5"><span>August 31, 2018 at 2:10:52 PM</span></div>
+                <div class="col-md-5 padding-5"><span>Last Data Refresh: </span></div>
+                <?php 
+                    if( isset( $LastDataRefresh ) && !empty( $LastDataRefresh ) ) {
+                        $Time = date("h:i:s A", strtotime($LastDataRefresh['LastDataRefresh'] ) );
+                        $LastDataRefresh = date("F d, Y", strtotime($LastDataRefresh['LastDataRefresh'] ) )." at ".$Time;
+                        ?><div class="col-md-7 padding-5"><span><?php echo $LastDataRefresh; ?></span></div><?php
+                    } else {
+                        ?> <div class="col-md-7 padding-5"><span> - </span></div> <?php
+                    }                    
+                    ?>
                 <div class="col-md-5 padding-5"><span>Number of Items: </span></div><div class="col-md-7 padding-5"><span><?php echo $BrandValue['NumberOfItem']; ?></span></div>
                 <div class="col-md-5 padding-5"><span>SEMA Brand Class: </span></div><div class="col-md-7 padding-5"><span><?php echo $BrandValue['ClassName'];?></span></div>
                    <?php }
@@ -65,13 +74,19 @@
                 <h4><strong>JustParts Import History (Last 15)</strong></h4>
             </div>
             <div class="row padding-5">
-                <div class="col-md-5 padding-5"><span>August 31, 2018 at 11:14:01 AM </span></div>
-                <div class="col-md-5 padding-5"><span>August 31, 2018 at 2:10:52 PM </span></div>
-                <div class="col-md-5 padding-5"><span>August 31, 2018 at 5:12:35 PM </span></div>
-                <div class="col-md-5 padding-5"><span>September 5, 2018 at 8:51:01 AM </span></div>
+            <?php 
+                    if( isset( $Last15ImportData ) && !empty( $Last15ImportData ) ) {
+                        foreach ($Last15ImportData as $ImportKey => $ImportValue) {
+                            $Time = date("h:i:s A", strtotime($ImportValue->LastSuccessImport ) );
+                            $Last15ImportData = date("F d, Y", strtotime($ImportValue->LastSuccessImport ) )." at ".$Time;
+                            ?><div class="col-md-5 padding-5"><span><?php echo $Last15ImportData; ?></span></div><?php
+                        }
+                    } else {
+                        ?><div class="col-md-5 padding-5"><span> -  </span></div><?php
+                    }
+            ?>
             </div>
-        </div>
-        
+        </div>        
         <div class="col-md-6 ">
             <div class="row border-bottom padding-5">
                 <h4><strong>Data Field Variables</strong></h4>
@@ -89,7 +104,15 @@
             </div>
             <div class="row padding-5">
                 <div class="col-md-5 padding-5"><span>Data Feed Name: </span></div><div class="col-md-7 padding-5"><span><?php echo (isset( $DataFeed ) && !empty( $DataFeed )) ? $DataFeed : "-"; ?></span></div>
-                <div class="col-md-5 padding-5"><span>Last Success Import: </span></div><div class="col-md-7 padding-5"><span>September 5, 2018 at 10:58:04 AM</span></div>
+                <div class="col-md-5 padding-5"><span>Last Success Import: </span></div>
+                <?php  if( isset( $LastSuccessImportHistory ) && !empty( $LastSuccessImportHistory ) ) {
+                     $HistoryTime = date("h:i:s A", strtotime($LastSuccessImportHistory->LastSuccessImport ) );
+                    $LastSuccessImportHistory = date("F d, Y", strtotime($LastSuccessImportHistory->LastSuccessImport ) )." at ".$HistoryTime;
+                    ?> <div class="col-md-7 padding-5"><span><?php echo $LastSuccessImportHistory; ?></span></div> <?php
+                } else {
+                   ?> <div class="col-md-7 padding-5"><span> - </span></div> <?php
+                }
+                ?>
             </div>
 
         </div>
