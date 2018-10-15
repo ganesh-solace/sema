@@ -66,9 +66,9 @@
             <div class="row padding-5">
                 <button type="button" id="AddNewBrand" class="btn btn-default btn-block">Add Brand</button>
             </div>
-            <div class="row padding-5">
+            <div class="row padding-5 dropdown display-list show">
                     <button class="btn btn-default btn-block btn dropdown-toggle" data-toggle="dropdown">Edit Brand <span class = "caret pull-right"></span></button>
-                    <ul class="dropdown-menu" style="width:45%" id="EditBrand">
+                    <ul class="dropdown-menu" style="width:45%" id="EditBrand" aria-labelledby="dropdownMenuButton">
                     <?php if( isset( $BrandList ) && !empty( $BrandList )){
                         foreach ($BrandList as $Brandkey => $Brandvalue) {
                             if($Brandkey != 0) { ?>
@@ -112,6 +112,8 @@
             $( "#append_brand_form" ).modal( "show" );
         });
 
+        $('[data-toggle=dropdown]').dropdown();
+
         // open the asscoiate seller pop up
           $( "#AssociateSeller" ).click( function() {                     
             $( "div.modal-backdrop" ).removeClass( "hide" );            
@@ -119,6 +121,7 @@
             $( "#append_brand_form" ).load( "<?php echo base_url().'sellers/AssociateSellerDashboard'; ?>" );
             $( "#append_brand_form" ).modal( "show" );
         });
+
 
         // edit button list click to display pop up form
         $("ul#EditBrand li").click( function() {

@@ -197,5 +197,22 @@ class Sellers extends BaseController {
         }
         return $PostArr;
     }
+
+    // ajax call Seller page: update the data feed file
+    public function UpdateDataFeedFile() {
+        $BrandID = $this->input->post()["BrandID"];
+        $SellerID = $this->input->post()["SellerID"];
+        $DataFeed = $this->input->post()["DataFeed"];
+
+        $data = array( 'DataFeed'=> $DataFeed );
+        $where = array( "BrandID"=> $BrandID, "SellerID"=> $SellerID, 'Status'=>  1 );
+        $this->db->where( $where );
+        $flag = $this->db->update( 'brand_seller_bridge', $data );
+        if($flag) {
+           echo json_encode($DataFeed);exit;
+        }
+        echo json_encode(" ");exit;
+        // return $flag;
+    }
     
 }

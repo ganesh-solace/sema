@@ -126,3 +126,7 @@ margin: 0;
 a,select,li,option,.cursor{
   cursor: pointer !important;
 }
+
+.display-none{
+  display: none;
+}

@@ -103,7 +103,11 @@
                 <h4><strong>JustParts Data Field Details</strong></h4>
             </div>
             <div class="row padding-5">
-                <div class="col-md-5 padding-5"><span>Data Feed Name: </span></div><div class="col-md-7 padding-5"><span><?php echo (isset( $DataFeed ) && !empty( $DataFeed )) ? $DataFeed : "-"; ?></span></div>
+                <?php $DataFeed =  (isset( $DataFeed ) && !empty( $DataFeed )) ? $DataFeed : "-"; ?>
+                <div class="col-md-5 padding-5"><span>Data Feed Name: </span></div><div class="col-md-5 padding-5 text-data-feed"><span><?php echo $DataFeed; ?></span></div>
+                <div class="col-md-5 padding-5 display-none"><input name="DataFeed" Class="input-data-feed form-control" value="<?php echo $DataFeed; ?>" /></div>
+                 <div class="col-md-2 padding-5  margin-right-0"><button class="btn-primary btn" id="EditDataFile"> Edit </button></div>
+                 <div class="col-md-2 padding-5  margin-right-0 display-none"><button class="btn-primary btn" id="UpdateDataFile"> Update </button></div>
                 <div class="col-md-5 padding-5"><span>Last Success Import: </span></div>
                 <?php  if( isset( $LastSuccessImportHistory ) && !empty( $LastSuccessImportHistory ) ) {
                      $HistoryTime = date("h:i:s A", strtotime($LastSuccessImportHistory->LastSuccessImport ) );
@@ -206,3 +210,43 @@
       </div>      
     </div>
   </div>
+  <?php
+  $SellerID = $SellerData[0]->ID;
+  $BrandID = $BrandData[0]["ID"];
+  ?>
+<script type="text/javascript">
+    jQuery( document ).ready(function( $ ) {
+        $("#EditDataFile").click(function() {
+            $(this).parent().addClass("display-none");
+            $("#UpdateDataFile").parent().removeClass("display-none");
+            $(".text-data-feed").addClass("display-none");
+             $(".input-data-feed").parent().removeClass("display-none");
+        }); 
+
+        $("#UpdateDataFile").click(function() {
+            var SellerID = "<?php echo $SellerID; ?>";
+            var BrandID = "<?php echo $BrandID; ?>";
+            var FormData = { "BrandID" : BrandID, "SellerID" : SellerID, "DataFeed" : $(".input-data-feed").val() };
+            var AjaxUrl = "<?php base_url(); ?>"+"sellers/UpdateDataFeedFile";
+            
+             $.ajax({
+                    url: AjaxUrl,
+                    type: 'POST',                    
+                    dataType: "json",                    
+                    data: FormData,
+                    success: function(data) {                        
+                        if( data != "" ) {
+                            $(".text-data-feed").children().html( data );
+                            $(".input-data-feed").val( data );
+                        } else {
+                            $(".text-data-feed").children().html( $(".input-data-feed").val() );
+                        }
+                        $("#EditDataFile").parent().removeClass("display-none");
+                        $("#UpdateDataFile").parent().addClass("display-none");
+                        $(".text-data-feed").removeClass("display-none");
+                        $(".input-data-feed").parent().addClass("display-none");                      
+                    }
+                });
+        });
+    });
+</script>
