@@ -76,6 +76,12 @@
 
         </div>
     </div>
+    <div class="row padding-5 pull-right">
+        <?php
+                $PreviousExtra = array( 'class' => 'btn btn-primary',"id" => 'Previous', "onClick" =>"document.location.href='DashBoards'");
+                echo form_button('Previous','Previous page', $PreviousExtra);
+        ?>
+    </div>
 </div>
 
 <script type="text/javascript">
