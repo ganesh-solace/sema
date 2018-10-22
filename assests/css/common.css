@@ -19,7 +19,7 @@
 }
 
 body {
- background: #efefef !important;
+ background: #ffffff !important;
 }
 
 .center_div{
@@ -129,4 +129,7 @@ a,select,li,option,.cursor{
 
 .display-none{
   display: none;
+}
+.content-left{
+  text-align: left !important;
 }

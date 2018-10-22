@@ -118,9 +118,16 @@
                 }
                 ?>
             </div>
-
+            
         </div>
+        
     </div>
+     <div class="row padding-5 pull-right">
+                <?php
+                     $PreviousExtra = array( 'class' => 'btn btn-primary',"id" => 'Previous');
+                        echo form_button('Previous','Previous page', $PreviousExtra);
+                ?>
+            </div>
 </div>
 
 
@@ -216,6 +223,7 @@
   ?>
 <script type="text/javascript">
     jQuery( document ).ready(function( $ ) {
+        // when click on edit button for data feed file 
         $("#EditDataFile").click(function() {
             $(this).parent().addClass("display-none");
             $("#UpdateDataFile").parent().removeClass("display-none");
@@ -223,6 +231,7 @@
              $(".input-data-feed").parent().removeClass("display-none");
         }); 
 
+        // update button gneterate when value change for data feed file update the name of file in database
         $("#UpdateDataFile").click(function() {
             var SellerID = "<?php echo $SellerID; ?>";
             var BrandID = "<?php echo $BrandID; ?>";
@@ -248,5 +257,22 @@
                     }
                 });
         });
+
+        $("#Previous").click(function() {
+            var BrandID = "<?php echo $BrandData[0]["ID"]; ?>";
+            var data = { 'id': BrandID };
+            var url = "<?php base_url()?>summary";
+             url_redirect({url:url,  method: "post",data: data});
+        });
+
+        function url_redirect(options){
+            var $form = $("<form />");                 
+            $form.attr("action",options.url);
+            $form.attr("method",options.method);                 
+            for (var data in options.data)
+            $form.append('<input type="hidden" name="'+data+'" value="'+options.data[data]+'" />');                      
+            $("body").append($form);
+            $form.submit();
+        }
     });
 </script>
