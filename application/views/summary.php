@@ -62,8 +62,10 @@
             <div class="row padding-5">
                 <?php
                     if( isset( $seller_list ) && !empty( $seller_list ) ) {
-                        foreach ($seller_list as $seller) { ?>
-                            <div class="col-md-4 padding-5"><a class="SellerDisplay" value="<?php echo $seller["ID"]; ?>"><?php echo $seller["Name"]; ?></a> </div>
+                        foreach ($seller_list as $seller) { 
+                            $SellerName = $seller['FirstName']." ".$seller['LastName'];
+                            ?>
+                            <div class="col-md-4 padding-5"><a class="SellerDisplay" value="<?php echo $seller["ID"]; ?>"><?php echo $SellerName; ?></a> </div>
                             <?php
                         }
                     }

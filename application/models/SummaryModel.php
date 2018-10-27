@@ -44,7 +44,7 @@ class SummaryModel extends CI_Model{
     }
 
     function getAssociateSellerList( $id ){
-        $this->db->select("s.*");
+        $this->db->select('s.*, REPLACE(s.LastName,"-","") LastName');
         $whereCondition = array("bsb.BrandID" => $id,"bsb.Status" => 1);
         // $this->db->where("bsb.BrandID", $id);
         $this->db->where( $whereCondition );

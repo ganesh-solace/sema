@@ -1,4 +1,6 @@
 <div class="container panel panel-body">
+    <div id="append_brand_form" tabindex="-1" role="dialog" data-toggle="modal" data-backdrop="static" data-keyboard="false" aria-labelledby="myModalLabel" data-target="#myModal"></div>
+
     <div class="row">
         <div class="col-md-6">
         
@@ -10,7 +12,7 @@
                 <h3><strong ><?php echo $BrandName;?></strong></h3>
             </div>
                <div class="row color-blue margin-top-neg-20 padding-5">
-                <h4><strong ><?php echo $SellerData[0]->Name;?></strong></h4>
+                <h4><strong ><?php echo $SellerData[0]->FirstName." ".$SellerData[0]->LastName;?></strong></h4>
             </div>
         </div>
         <div class="col-md-6">
@@ -34,7 +36,7 @@
                     foreach ($SellerData as $SellerKey => $SellerValue) {
                          $OnlineSince = date("F d, Y", strtotime($SellerValue->CreatedDate)); ?>
                
-                <div class="col-md-5 padding-5"><span>Seller Name: </span></div><div class="col-md-3 padding-5"><span><?php echo $SellerValue->Name; ?></span></div><div class="col-md-4 padding-5"><span><a href="#">View Contact Details</a></span></div>
+                <div class="col-md-5 padding-5"><span>Seller Name: </span></div><div class="col-md-3 padding-5"><span><?php echo $SellerData[0]->FirstName." ".$SellerData[0]->LastName; ?></span></div><div class="col-md-4 padding-5"><span><a id="SellerContact">View Contact Details</a></span></div>
                 <div class="col-md-5 padding-5"><span>Business Name: </span></div><div class="col-md-7 padding-5"><span><?php echo $SellerValue->BusinessName; ?></span></div>
                 <div class="col-md-5 padding-5"><span>Online Since: </span></div><div class="col-md-7 padding-5"><span><?php echo $OnlineSince; ?></span></div>
                 <div class="col-md-5 padding-5"><span>JustParts Seller ID: </span></div><div class="col-md-7 padding-5"><span><?php echo $SellerValue->JPSellerID; ?></span></div>
@@ -223,6 +225,20 @@
   ?>
 <script type="text/javascript">
     jQuery( document ).ready(function( $ ) {
+        //open seller contact form 
+        $("#SellerContact").click(function() {
+            var PostURL = "<?php echo base_url().'sellers/SellerContactDetails'; ?>" ;
+            var SellerID = "<?php echo $SellerID; ?>";
+            var BrandID = "<?php echo $BrandID; ?>";
+            $( "div.modal-backdrop" ).removeClass( "hide" );            
+            $( "div.modal-backdrop" ).addClass( "show" );    
+            
+            var data = { 'SellerID' : SellerID, 'BrandID': BrandID };
+            //  url_redirect({url:PostURL,  method: "post",data: data});
+            $( "#append_brand_form" ).load( PostURL, data );
+            $( "#append_brand_form" ).modal( "show" );
+        });
+
         // when click on edit button for data feed file 
         $("#EditDataFile").click(function() {
             $(this).parent().addClass("display-none");

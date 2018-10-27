@@ -56,9 +56,21 @@ class BaseController extends CI_Controller {
 		}
 		
 		public function getSellerList() {
-			$SellerData = $this->SelectQuery('sellers',"ID,Name");
+			$SellerData = $this->SelectQuery('sellers',"ID,CONCAT(FirstName,' ',LastName) Name ");
 			$SellerList = array();
 			// $whereCondition = array( 'Status' => 1);
+			foreach ($SellerData as $SellerKey => $SellerValue) {
+				$SellerList[$SellerValue->ID] =  $SellerValue->Name;
+			}
+			return $SellerList;
+		}
+
+			public function getJPSellerList() {
+			$whereCondition = array( 'Status' => 1);
+			$SellerData = $this->SelectQuery('sellers','ID,CONCAT(JPSellerName,"( ",CONCAT(FirstName," ", REPLACE(LastName,"-","")), ")" ) Name', $whereCondition);
+
+			$SellerList = array();
+		
 			foreach ($SellerData as $SellerKey => $SellerValue) {
 				$SellerList[$SellerValue->ID] =  $SellerValue->Name;
 			}

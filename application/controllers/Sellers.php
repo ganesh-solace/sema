@@ -155,7 +155,7 @@ class Sellers extends BaseController {
 
     public function loadAssociateSellerTemplateData( $action ) {
          $BrandList = $this->getBrandList();
-        $SellerList = $this->getSellerList();
+        $SellerList = $this->getJPSellerList();
         $data["BrandList"] = $BrandList;
         $data["SellerList"] = $SellerList;
         $data["action"] = $action;
@@ -214,5 +214,16 @@ class Sellers extends BaseController {
         echo json_encode(" ");exit;
         // return $flag;
     }
-    
+
+
+    // Seller pop up contact form :modal contact form post function 
+    public function SellerContactDetails() {
+        $SellerID = $this->input->post()['SellerID'];
+        $BrandID = $this->input->post()['BrandID'];
+        $SellerData = $this->GetSellerData( $SellerID );
+        $data = array();
+        $data["SellerData"] = $SellerData[0];
+        $this->load->view ( 'sellers/seller_contact', $data );
+    }
+   
 }
