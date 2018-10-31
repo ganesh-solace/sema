@@ -12,7 +12,7 @@
                 <h3><strong ><?php echo $BrandName;?></strong></h3>
             </div>
                <div class="row color-blue margin-top-neg-20 padding-5">
-                <h4><strong ><?php echo $SellerData[0]->FirstName." ".$SellerData[0]->LastName;?></strong></h4>
+                <h4><strong ><?php echo $SellerData[0]->JPSellerName."( ".$SellerData[0]->FirstName." ".$SellerData[0]->LastName." )";?></strong></h4>
             </div>
         </div>
         <div class="col-md-6">
@@ -36,7 +36,7 @@
                     foreach ($SellerData as $SellerKey => $SellerValue) {
                          $OnlineSince = date("F d, Y", strtotime($SellerValue->CreatedDate)); ?>
                
-                <div class="col-md-5 padding-5"><span>Seller Name: </span></div><div class="col-md-3 padding-5"><span><?php echo $SellerData[0]->FirstName." ".$SellerData[0]->LastName; ?></span></div><div class="col-md-4 padding-5"><span><a id="SellerContact">View Contact Details</a></span></div>
+                <div class="col-md-5 padding-5"><span>Seller Name: </span></div><div class="col-md-3 padding-5"><span><?php echo $SellerData[0]->JPSellerName; ?></span></div><div class="col-md-4 padding-5"><span><a id="SellerContact">View Contact Details</a></span></div>
                 <div class="col-md-5 padding-5"><span>Business Name: </span></div><div class="col-md-7 padding-5"><span><?php echo $SellerValue->BusinessName; ?></span></div>
                 <div class="col-md-5 padding-5"><span>Online Since: </span></div><div class="col-md-7 padding-5"><span><?php echo $OnlineSince; ?></span></div>
                 <div class="col-md-5 padding-5"><span>JustParts Seller ID: </span></div><div class="col-md-7 padding-5"><span><?php echo $SellerValue->JPSellerID; ?></span></div>

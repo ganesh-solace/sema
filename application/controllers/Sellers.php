@@ -63,7 +63,7 @@ class Sellers extends BaseController {
     //Index: get seller data for seller dashboard
     public function GetSellerData( $id ) {
         $whereCondition = array("ID" => $id );
-        $SellerData = $this->SelectQuery('sellers', "*", $whereCondition ) ;
+        $SellerData = $this->SelectQuery('sellers', '*, REPLACE(LastName,"-","") LastName', $whereCondition ) ;
 
         return $SellerData;
     }
