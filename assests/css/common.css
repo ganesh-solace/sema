@@ -133,3 +133,23 @@ a,select,li,option,.cursor{
 .content-left{
   text-align: left !important;
 }
+
+.fs-wrap.multiple .fs-option.selected .fs-checkbox i {
+    background-color: #9E9E9E !important;
+}
+
+.fs-wrap {
+  width: 100% !important;
+}
+
+.fs-label-wrap .fs-label{
+  color: #605757 !important;
+}
+.fs-dropdown {
+  width: 90% !important;
+      margin-right: 15px ;
+}
+.fs-label-wrap{
+      border-radius: 4px !important;
+    line-height: 20px !important;
+}

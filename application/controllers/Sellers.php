@@ -162,7 +162,7 @@ class Sellers extends BaseController {
         return $data;
     }
 
-    public function AssociateSellerSave( $SellerData ) {           
+    public function AssociateSellerSave( $SellerData ) {       
         $this->deleteRecordsForBrandID( $SellerData["BrandID"] );            
         $SellerPostDataArr = $this->GenerateBrandSellerBridgeData( $SellerData );
         $flag= $this->db->insert_batch( 'brand_seller_bridge' , $SellerPostDataArr );

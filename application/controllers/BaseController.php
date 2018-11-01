@@ -67,7 +67,8 @@ class BaseController extends CI_Controller {
 
 			public function getJPSellerList() {
 			$whereCondition = array( 'Status' => 1);
-			$SellerData = $this->SelectQuery('sellers','ID,CONCAT(JPSellerName,"( ",CONCAT(FirstName," ", REPLACE(LastName,"-","")), ")" ) Name', $whereCondition);
+			$orderBy = array("field" => "JPSellerName", "Type" => "ASC");
+			$SellerData = $this->SelectQuery('sellers','ID,CONCAT(JPSellerName,"( ",CONCAT(FirstName," ", REPLACE(LastName,"-","")), ")" ) Name', $whereCondition, "", $orderBy);
 
 			$SellerList = array();
 		
