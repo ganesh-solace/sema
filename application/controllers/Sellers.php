@@ -186,14 +186,19 @@ class Sellers extends BaseController {
     public function GenerateBrandSellerBridgeData( $SellerData ) { 
         $PostArr = array();   
         $TransactionDetails = $this->getTransactionDetails();
+        $BrandName = $this->Seller->GetBrandName( $SellerData["BrandID"] );
         foreach ($SellerData['SellerID'] as $SellerKey => $SellerValue) {
             $PostArr[$SellerKey]['SellerID'] = $SellerValue;
+            $SellerName = $this->Seller->GetSellerName( $SellerValue );
             $PostArr[$SellerKey]['BrandID'] = $SellerData["BrandID"];
+            $PostArr[$SellerKey]['DataFeed'] = $BrandName."_".$SellerName.".csv";
             $PostArr[$SellerKey]['CreatedDate'] = $TransactionDetails["CreatedDate"];
             $PostArr[$SellerKey]['ModifiedDate'] = $TransactionDetails["ModifiedDate"];
             $PostArr[$SellerKey]['Status'] =  $TransactionDetails["Status"];
             $PostArr[$SellerKey]['CreatedBy'] =  $TransactionDetails["CreatedBy"];
             $PostArr[$SellerKey]['ModifiedBy'] =  $TransactionDetails["ModifiedBy"];
+            $PostArr[$SellerKey]['ModifiedBy'] =  $TransactionDetails["ModifiedBy"];
+            
         }
         return $PostArr;
     }

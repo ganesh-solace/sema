@@ -10,7 +10,26 @@ class SellerModel extends CI_Model{
     }    
 
  
-   
+   public function GetSellerName( $SellerID ) {
+        $whereCondition = array("ID" => $SellerID,"Status"=>1);
+        $this->db->select( 'Concat(FirstName,LastName) Name' );
+        $this->db->from( 'sellers' );
+        $this->db->where( $whereCondition );
+        $query = $this->db->get();
+        $query = $query->result();
+        
+        return $query[0]->Name;
+   }
+
+    public function GetBrandName( $BrandID ) {
+        $whereCondition = array("ID" => $BrandID,"Status"=>1);
+        $this->db->select( 'Name' );
+        $this->db->from( 'brands' );
+        $this->db->where( $whereCondition );
+        $query = $this->db->get();
+        $query = $query->result();
+        return $query[0]->Name;
+    }
 
     //PriceAdjustment:  insert post data into brand seller price adjustment bridge table
     public function InsertPriceAdjustmentData( $PriceAdjustmentArr ) {

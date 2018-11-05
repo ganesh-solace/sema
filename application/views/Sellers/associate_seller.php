@@ -1,4 +1,6 @@
 
+<link href="<?php echo base_url(); ?>assests/css/fSelect.css" rel="stylesheet">
+<script src="<?php echo base_url(); ?>assests/js/fSelect.js" rel="stylesheet"></script>
 <script src="<?php echo base_url(); ?>assests/js/bootstrap.min.js" rel="stylesheet"></script>
 <div id="myModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
@@ -36,8 +38,9 @@
                     </div>
                     <div class="col-md-6">
                     <?php 
-                        $js = array(  'id'       => 'SellerMultiSelect' );
-
+                        $js = array(  'id'       => 'SellerMultiSelect', "class" => "form-control" );
+                       
+                        
                         $SellerList =  (isset( $SellerList ) && !empty( $SellerList )) ? $SellerList : "";
                         echo form_multiselect('SellerID[]', $SellerList,'',$js);
                     ?>
@@ -66,10 +69,58 @@
 
 <script type="text/javascript">
    jQuery( document ).ready(function( $ ) {
-        $( '#SellerMultiSelect').multiselect({
+//         $( '#SellerMultiSelect').multiselect({
+//             includeSelectAllOption: true,
+//             selectAll: true
+//         }).fSelect();
+
+         $( '#SellerMultiSelect').fSelect({
             includeSelectAllOption: true,
             selectAll: true
         });
+
+        // $( document ).on("click", ".fs-option", function() {
+        //     // alert("hi");
+        //     // console.log( $(this).attr("data-value"));
+        //     if( $(this).attr("data-value") == 0 && $(this).hasClass("selected") ) {
+        //         $(".fs-option").filter(function( index, value ) {
+        //             console.log( $(this).hasClass("selected") );
+        //         });
+        //     }
+        // });
+        // $('.ms-selectall').before('<div class="fs-search"><input type="search" placeholder="Search" id="inputSearch"></div>');
+        // // ms-selectall
+
+        // $(document).on("keyup", '#inputSearch', function() {
+        //     var input, filter, ul, li, a, i;
+        //     input = $(this);
+        //     filter = input.value;
+        //     div = $(".ms-options");
+        //      li = div.find("ul li");
+        //      for (i = 0; i < li.length; i++) {
+        //         if (li[i].innerHTML.indexOf(filter) > -1) {
+        //             li[i].style.display = "block";
+        //         } else {
+        //            li[i].style.display = "none";
+        //         }
+        //      }
+        //      console.log( li );
+        // });
+    // function filterFunction() {
+    //     alert("hiw");
+    //     // var input, filter, ul, li, a, i;
+    //     // input = document.getElementById("myInput");
+    //     // filter = input.value.toUpperCase();
+    //     // div = document.getElementById("myDropdown");
+    //     // a = div.getElementsByTagName("a");
+    //     // for (i = 0; i < a.length; i++) {
+    //     // if (a[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
+    //     // a[i].style.display = "";
+    //     // } else {
+    //     // a[i].style.display = "none";
+    //     // }
+    //     // }
+    // }
 
         var BrandID = "<?php echo $BrandID; ?>";
         if( BrandID != 0  ) {
@@ -107,9 +158,18 @@
              var selectedOptions = SellerID.split(",");
             for(var i in selectedOptions) {
                  var optionVal = selectedOptions[i];
+                // 
                 $("select#SellerMultiSelect").find("option[value="+optionVal+"]").prop("selected", "selected");
+                $("select#SellerMultiSelect").find("option[value="+optionVal+"]").attr("selected", "selected");
+                //  console.log($(".fs-dropdown .fs-options .fs-option").attr("data-value"));
+                $(".fs-dropdown .fs-options .fs-option").each(function( index ) {
+                    if( $(this).attr("data-value") == optionVal ) {
+                         console.log($(this).addClass("selected"));
+                    }
+                       
+                });
             }
-             $("select#SellerMultiSelect").multiselect('reload');
+             $("select#SellerMultiSelect").fSelect('reloadDropdownLabel');
         }
 
         // popup modal close
