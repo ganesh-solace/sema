@@ -190,7 +190,8 @@ class Sellers extends BaseController {
         foreach ($SellerData['SellerID'] as $SellerKey => $SellerValue) {
             $PostArr[$SellerKey]['SellerID'] = $SellerValue;
             $SellerName = $this->Seller->GetSellerName( $SellerValue );
-            $PostArr[$SellerKey]['BrandID'] = $SellerData["BrandID"];
+            $PostArr[$SellerKey]['BrandID'] = $SellerData["BrandID"];           
+            $BrandNameDataFeed = str_replace(" ", "_", $BrandName);
             $PostArr[$SellerKey]['DataFeed'] = $BrandName."_".$SellerName.".csv";
             $PostArr[$SellerKey]['CreatedDate'] = $TransactionDetails["CreatedDate"];
             $PostArr[$SellerKey]['ModifiedDate'] = $TransactionDetails["ModifiedDate"];

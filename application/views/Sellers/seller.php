@@ -105,7 +105,10 @@
                 <h4><strong>JustParts Data Field Details</strong></h4>
             </div>
             <div class="row padding-5">
-                <?php $DataFeed =  (isset( $DataFeed ) && !empty( $DataFeed )) ? $DataFeed : "-"; ?>
+                <?php
+                 $DataFeed =  (isset( $DataFeed ) && !empty( $DataFeed )) ? $DataFeed : "-"; 
+                 $DataFeed = str_replace(" ", "_", $DataFeed);
+                 ?>
                 <div class="col-md-5 padding-5"><span>Data Feed Name: </span></div><div class="col-md-5 padding-5 text-data-feed"><span><?php echo $DataFeed; ?></span></div>
                 <div class="col-md-5 padding-5 display-none"><input name="DataFeed" Class="input-data-feed form-control" value="<?php echo $DataFeed; ?>" /></div>
                  <div class="col-md-2 padding-5  margin-right-0"><button class="btn-primary btn" id="EditDataFile"> Edit </button></div>
@@ -119,6 +122,16 @@
                    ?> <div class="col-md-7 padding-5"><span> - </span></div> <?php
                 }
                 ?>
+            </div>
+            <div class="row padding-5">
+              <?php
+                 $DataFeedXLS =  (isset( $DataFeed ) && !empty( $DataFeed )) ? WEBSTORE_AUTOMATE_URL.$DataFeed : "-"; 
+                 $DataFeedXLS = str_replace(".csv", ".xlsx", $DataFeedXLS);
+                 $DataFeedXLS = str_replace(" ", "_", $DataFeedXLS);
+                 ?>
+                <div class="col-md-5 padding-5"><span>Webstore Automatic URL: </span></div>
+
+                <div class="col-md-7 input-xls"><?php echo $DataFeedXLS;?></div>
             </div>
             
         </div>
@@ -253,7 +266,7 @@
             var BrandID = "<?php echo $BrandID; ?>";
             var FormData = { "BrandID" : BrandID, "SellerID" : SellerID, "DataFeed" : $(".input-data-feed").val() };
             var AjaxUrl = "<?php base_url(); ?>"+"sellers/UpdateDataFeedFile";
-            
+            var ChangeDataXLSURL = "<?php echo WEBSTORE_AUTOMATE_URL; ?>";
              $.ajax({
                     url: AjaxUrl,
                     type: 'POST',                    
@@ -263,6 +276,8 @@
                         if( data != "" ) {
                             $(".text-data-feed").children().html( data );
                             $(".input-data-feed").val( data );
+                            var XLSData = data.replace(".csv", ".xlsx");
+                            $(".input-xls").html( ChangeDataXLSURL+XLSData );
                         } else {
                             $(".text-data-feed").children().html( $(".input-data-feed").val() );
                         }

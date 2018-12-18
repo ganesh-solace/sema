@@ -12,13 +12,14 @@ class SellerModel extends CI_Model{
  
    public function GetSellerName( $SellerID ) {
         $whereCondition = array("ID" => $SellerID,"Status"=>1);
-        $this->db->select( 'Concat(FirstName,LastName) Name' );
+        // $this->db->select( 'Concat(FirstName,LastName) Name' );
+        $this->db->select( 'JPSellerID' );
         $this->db->from( 'sellers' );
         $this->db->where( $whereCondition );
         $query = $this->db->get();
         $query = $query->result();
         
-        return $query[0]->Name;
+        return $query[0]->JPSellerID;
    }
 
     public function GetBrandName( $BrandID ) {

@@ -29,9 +29,6 @@
             <div class="row padding-5">
             
             <?php
-                // echo "<pre>";
-                // print_r($brand_data);
-                // exit;
                 foreach($BrandData as $brand):
             ?>
                 <div class="col-md-5 padding-5"><span>Associated Date: </span></div><div class="col-md-7 padding-5"><span><?php echo (isset($brand['CreatedDate'])) ? $brand['CreatedDate'] : '-' ?></span></div>
@@ -49,7 +46,27 @@
 
                 <div class="col-md-5 padding-5"><span>Associate Webstores: </span></div><div class="col-md-7 padding-5"><span><b>15</b></span></div>
             </div>
-            
+             <div class="row border-bottom padding-5">
+                <h4><strong>Brand FTP Path Details</strong></h4>
+            </div>
+              <?php 
+                $BrandDisplayFolder = strtolower($brand["Name"]); 
+                $BrandDisplayFolder = str_replace(" ", "_", $BrandDisplayFolder);
+                $BrandDisplayFolder = EXCEL_FILE_PATH.$BrandDisplayFolder;
+                 
+               ?>
+            <div class="row padding-5">
+                <div class="col-md-4"> With fitment: </div>
+                <div class="col-md-8"><?php  echo $BrandDisplayFolder."/with_fitment/";?> </div>
+            </div>
+            <div class="row padding-5">
+                <div class="col-md-4"> Without fitment: </div>
+                <div class="col-md-8"> <?php  echo $BrandDisplayFolder."/without_fitment/";?> </div>
+            </div>
+            <div class="row padding-5">
+                <div class="col-md-4"> Images: </div>
+                <div class="col-md-8"> <?php  echo $BrandDisplayFolder."/images/";?>  </div>
+            </div>
         </div>
         
         <div class="col-md-6 ">

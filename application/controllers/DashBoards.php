@@ -24,6 +24,7 @@ class DashBoards extends BaseController {
 		$RecentBrandList = $this->getRecentBrandList();
 		$data['BrandList'] = $BrandList;
 		$data['RecentBrandList'] = $RecentBrandList;
+		if(isset($_SESSION["summary"]) && !empty($_SESSION["summary"])) unset($_SESSION["summary"]);
 		$this->template->load('template','dashboards/dashboard',$data);
 	}
 
