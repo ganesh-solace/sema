@@ -139,6 +139,7 @@
         var CodeID = "<?php echo $CodeID; ?>";
         if( BrandID != 0  ) {
             $("#BrandDropDown").prop("disabled", true);
+             $("#BrandDropDown").val(CodeID);
             // var id = $("#BrandDropDown").find('option:selected').attr("brand_id");
         }
         // if value is deafult selected display the respective seller
@@ -158,14 +159,13 @@
         // common ajax call for document ready and on change of brand  drop down        
         function MultiCheckAjaxCall( BrandID, CodeID ) {
              var data = {"BrandID" : BrandID, "CodeID" : CodeID };
-             
+
             $.ajax({
                 url: "<?php echo base_url();?>"+"sellers/AjaxgetSellerID",
                 type: 'POST',                    
                 dataType: "json",                    
                 data: data,
                 success: function(data) {
-                    console.log(data);
                     var SellerID = data.SellerID;
                     if( !$.isEmptyObject({ SellerID }) ) {
                         if( SellerID[0]['SellerID'] != null) {
