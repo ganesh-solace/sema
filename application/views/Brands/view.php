@@ -45,7 +45,7 @@
         var datasource = <?php echo $datasource;?>;
         $('.example').pagination({
             dataSource: datasource,
-            pageSize: 2,
+            pageSize: 3,
             showPrevious: true,
             ulClassName : "pagination",
             showNext: true,
@@ -60,9 +60,9 @@ function template( data ){
     var html ="";
     $.each( data, function( key, value ) {
         html += '<div class="row row-border">';
-        html += '<div class="col-md-3 cell-border"><a value="'+value["ID"]+'" class="BrandCode">'+value["Code"]+'</a></div>';
-         html += '<div class="col-md-4 cell-border"><a value="'+value["ID"]+'" class="BrandName">'+value["Name"]+'</a></div>';
-        html += '<div class="col-md-4">'+value["Name"]+'</div>';
+        html += '<div class="col-md-3 cell-border"><a value="'+value["CodeID"]+'" class="BrandCode">'+value["BrandCode"]+'</a></div>';
+         html += '<div class="col-md-4 cell-border"><a value="'+value["ID"]+'" class="BrandName">'+value["BrandName"]+'</a></div>';
+        html += '<div class="col-md-4">'+value["Description"]+'</div>';
         html += '</div>';
     });
     return html;
@@ -79,17 +79,26 @@ function template( data ){
         
     //click on brand code redirect to brand summary 
     $(document).on("click","a.BrandCode",function() {
-            var data = {'id': $(this).attr('value')};
-            var url = "<?php base_url()?>summary";
-            url_redirect({url:url,  method: "post",data: data});
+            var CodeID = $(this).attr('value');
+            var id = $(this).parent("div").next("div").children("a").attr("value");
+            RedirectOnclick(id, CodeID);
         });
 
+        //click on brand Name redirect to brand summary 
         $(document).on("click","a.BrandName",function() {
-            var data = {'id': $(this).attr('value')};
-            var url = "<?php base_url()?>summary";
-            url_redirect({url:url,  method: "post",data: data});
+            var CodeID =  $(this).parent("div").prev("div").children("a").attr("value");
+            var id = $(this).attr('value');
+            RedirectOnclick(id, CodeID);
+            
         });
         
+        // common redirect function from code and name 
+        function RedirectOnclick(id, CodeID) {
+            var data = {'id': id, "CodeID":CodeID};
+            var url = "<?php base_url()?>summary";
+            url_redirect({url:url,  method: "post",data: data});
+        }
+
          // create a input element to post the hidden id on summary page
           function url_redirect(options){
                  var $form = $("<form />");                 

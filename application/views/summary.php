@@ -21,7 +21,7 @@
     <div class="row">
         <div class="col-md-6">
              <div class="row title-orange">
-                <h3><strong ><?php  echo $BrandData[0]["Name"]; ?></strong></h3>
+                <h3><strong ><?php  echo $BrandData[0]["AppendBrandCode"]; ?></strong></h3>
             </div>
             <div class="row border-bottom padding-5">
                 <h4><strong>Brand Summary</strong></h4>
@@ -53,6 +53,11 @@
                 $BrandDisplayFolder = strtolower($brand["Name"]); 
                 $BrandDisplayFolder = str_replace(" ", "_", $BrandDisplayFolder);
                 $BrandDisplayFolder = EXCEL_FILE_PATH.$BrandDisplayFolder;
+                $BrandCode = strtolower($brand["BrandCode"]);
+                $BrandCode = str_replace(" ", "_", $BrandCode);
+                $BrandDisplayFolder =  $BrandDisplayFolder."/".$BrandCode;
+
+                // print_r($BrandData[0]["CodeID"]);
                  
                ?>
             <div class="row padding-5">
@@ -95,6 +100,23 @@
                 <button type="button" id="AssociateSeller" class="btn btn-default btn-block">Associate New Seller</button>
             </div>
 
+            <div class="row border-bottom padding-5">
+                <div class="col-md-6"> <h4><strong>Set Title Configuration</strong></h4></div>               
+            </div>
+             <div class="row">
+                    <div class="col-md-6 padding-5"><button type="button" id="SetTitle" class="btn btn-default btn-block">Set Title</button></div>
+                    <div class="col-md-6 padding-5">
+                    <?php
+                        $TitleDisplaylabel = "-";
+                        if(isset($TitleDisplayData) && !empty($TitleDisplayData)){
+                            if(isset($TitleDisplayData[0]->BrandTitle)){
+                                $TitleDisplaylabel = str_replace(","," - ", $TitleDisplayData[0]->BrandTitle);
+                            }
+                        }
+                    ?>
+                    <label><?php echo $TitleDisplaylabel; ?></label>
+                    </div>
+                </div>
         </div>
     </div>
     <div class="row padding-5 pull-right">
@@ -108,9 +130,13 @@
 <script type="text/javascript">
 jQuery( document ).ready(function( $ ) {
     $("a.SellerDisplay").click(function() {
-        var BrandName = "<?php echo $BrandData[0]["Name"]; ?>";
+        // var BrandName = "<?php //echo $BrandData[0]["Name"]; ?>";
+        var BrandName = "<?php echo $BrandData[0]["AppendBrandCode"]; ?>";
+        
         var BrandID = "<?php echo $BrandData[0]["ID"]; ?>";
-        var data = {'id': $(this).attr('value'), "BrandName": BrandName,"BrandID":BrandID};
+        var CodeID = "<?php echo $BrandData[0]["CodeID"]; ?>";
+        var data = {'id': $(this).attr('value'), "BrandName": BrandName,"BrandID":BrandID,"CodeID":CodeID};
+        // console.log(data);return false;
         var url = "<?php base_url()?>sellers";
          url_redirect({url:url,  method: "post",data: data});
     });
@@ -127,11 +153,24 @@ jQuery( document ).ready(function( $ ) {
 
      // open the asscoiate seller pop up
           $( "#AssociateSeller" ).click( function() {   
-             var BrandID = "<?php echo $BrandData[0]["ID"]; ?>";     
-             var BrandData = { "BrandID" : BrandID, "action" : "summary" };             
+             var BrandID = "<?php echo $BrandData[0]["ID"]; ?>"; 
+             var CodeID = "<?php echo $BrandData[0]["CodeID"]; ?>";     
+             var BrandData = { "BrandID" : BrandID, "CodeID" : CodeID, "action" : "summary" };             
             $( "div.modal-backdrop" ).removeClass( "hide" );            
             $( "div.modal-backdrop" ).addClass( "show" );    
             $( "#append_brand_form" ).load( "<?php echo base_url().'sellers/AssociateSellerSummary'; ?> " , BrandData );
+            $( "#append_brand_form" ).modal( "show" );
+        });
+
+
+        //Set TITLE
+        $("#SetTitle").click(function(){
+             var BrandID = "<?php echo $BrandData[0]["ID"]; ?>"; 
+             var CodeID = "<?php echo $BrandData[0]["CodeID"]; ?>";     
+             var BrandData = { "BrandID" : BrandID, "CodeID" : CodeID, "action" : "summary" }; 
+              $( "div.modal-backdrop" ).removeClass( "hide" );            
+            $( "div.modal-backdrop" ).addClass( "show" );    
+            $( "#append_brand_form" ).load( "<?php echo base_url().'summary/SetDisplayTitle'; ?> " , BrandData );
             $( "#append_brand_form" ).modal( "show" );
         });
 });

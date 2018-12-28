@@ -153,3 +153,42 @@ a,select,li,option,.cursor{
       border-radius: 4px !important;
     line-height: 20px !important;
 }
+.add-code-row{
+  padding-top: 3px;
+}
+
+.button-space {
+    width: 60px;
+}
+
+/* .reduce-input-width{
+  width: 93% !important;
+} */
+
+ul.BrandCode {
+    list-style: none;
+    display: none;
+}
+
+.border{
+			    border: 2px solid #e2d9d9;
+    min-height: 150px;
+    overflow-y: auto;
+    padding-top: 15px;
+    background: whitesmoke;
+    padding-bottom: 15px;
+		}
+		ul.ms-list {
+			list-style: none;
+    }
+     .space{
+       padding: 6px;
+    }
+    .drag-drop{
+          padding-top: 50px;
+    }
+
+    .switch {
+    background: transparent url("http://loudev.com/img/switch.png") no-repeat 50% 50%;
+    /* width: 370px; */
+}

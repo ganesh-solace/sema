@@ -31,7 +31,23 @@ class SummaryModel extends CI_Model{
         $query = $this->db->get();
         return $query->result_array();
     }
+
+    // Seller Index, Summary Index: generate the brands wiht code data 
+    public function getBrandCodeSummaryByID($id, $CodeID) {
+        $this->db->distinct();
+        $this->db->select("B.*, GROUP_CONCAT(SC.Name) ClassName, BCB.ID CodeID, BCB.AppendBrandCode, BCB.BrandCode");
+        $this->db->from("sema_brand_class_bridge SBC");
+        $this->db->join('sema_class SC', 'SC.ID = SBC.ClassID', 'INNER');
+        $this->db->join('brands B', 'SBC.BrandID = B.ID', 'INNER');
+        $this->db->join('brand_code_bridge BCB', 'BCB.BrandID = B.ID AND BCB.ID = SBC.BrandCodeID', 'INNER');
+        $this->db->where("SBC.BrandID", $id);
+        $whereCondition = array("SBC.BrandID"=>$id, "BCB.ID"=>$CodeID);
+        $this->db->where($whereCondition);
+        $query = $this->db->get();
+        return $query->result_array();
+    }
     
+    //not in use
     public function NumberOfAssociateSeller( $id ) {
         $this->db->distinct();        
         $this->db->select("COUNT(BSB.SellerID) AssociateSeller");        
@@ -43,7 +59,19 @@ class SummaryModel extends CI_Model{
         return $query->result_array();
     }
 
-    function getAssociateSellerList( $id ){
+   public function NumberOfAssociateSellerCode( $id, $CodeID ) {
+        $this->db->distinct();        
+        $this->db->select("COUNT(BSB.SellerID) AssociateSeller");        
+        $this->db->from("brands B");
+        $a = $this->db->join('`brand_seller_bridge` BSB', 'B.ID = BSB.BrandID', 'inner');
+        $whereCondition = array("B.ID" => $id,"BSB.Status" => 1);
+        $this->db->where($whereCondition);
+         $query = $this->db->get();
+        return $query->result_array();
+    }
+    
+    // not in use 
+       function getAssociateSellerList( $id ){
         $this->db->select('s.*, REPLACE(s.LastName,"-","") LastName');
         $whereCondition = array("bsb.BrandID" => $id,"bsb.Status" => 1);
         // $this->db->where("bsb.BrandID", $id);
@@ -52,6 +80,20 @@ class SummaryModel extends CI_Model{
         $a = $this->db->join('brand_seller_bridge bsb', 's.ID = bsb.SellerID', 'inner');
         $query = $this->db->get();
         return $query->result_array();
+    }
+
+    // Get the Seller list associated to particular brand code
+    function getAssociateSellerListCode( $id, $CodeID ){
+        $this->db->select('s.*, REPLACE(s.LastName,"-","") LastName');
+        $whereCondition = array("bsb.BrandID" => $id,"BrandCodeID" => $CodeID, "bsb.Status" => 1);
+        // $this->db->where("bsb.BrandID", $id);
+        $this->db->where( $whereCondition );
+        $this->db->from("sellers s");
+        $a = $this->db->join('brand_seller_bridge bsb', 's.ID = bsb.SellerID', 'inner');
+        $query = $this->db->get();
+        $query =  $query->result_array();
+        // print_r($query);exit;
+         return $query;
     }
 
     

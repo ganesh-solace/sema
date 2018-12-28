@@ -43,6 +43,7 @@ class BaseController extends CI_Controller {
 			return $BrandList;
 		}
 
+		
 		public function getRecentBrandList() {			
 			$BrandList = array();
 			$whereCondition = array( 'Status' => 1);
@@ -109,18 +110,18 @@ class BaseController extends CI_Controller {
 		return $TrasactionArray;
 	}
 
-	public function updateInsert( $data,$parent, $child, $id ) {
+	public function updateInsert( $data,$parent, $child,$childCode, $id, $key, $key2, $CodeIDStatus ) {
 		$this->db->trans_begin();
-		$this->db->trans_strict( FALSE );	
-
+		$this->db->trans_strict( FALSE );
 		$where = array( "ID" => $id );
 		$this->db->where( $where );
 		$flag = $this->db->update( $parent , $data[$parent] );
-
-		if( $flag ) {
-			$flag =  $this->db->insert_batch( $child , $data[$child] );
+		if($flag) {
+			$this->update_batch_code($childCode, $data[$childCode]);
+			 $this->update_batch_codeClass($child, $data[$child]);
+		
 		}
-
+		
 		if ( $this->db->trans_status() === FALSE) {
 			$this->db->trans_rollback();
 		} else {
@@ -129,12 +130,75 @@ class BaseController extends CI_Controller {
 		return $flag;
 	}
 
-	public function SaveAll( $data,$parent, $child, $key ) {
+	public function update_batch_code($childCode, $data) {
+		
+		foreach ($data as $key => $value) {
+			$where = array();
+			$where = array( "ID" => $value["ID"],"BrandID" => $value["BrandID"] );
+			$this->db->where( $where );
+			$this->db->update($childCode, $value);
+		}
+	}
+
+	public function update_batch_codeClass($child, $data) {
+		foreach ($data as $key => $value) {
+			$this->db->insert_batch( $child , $value ); 			
+		}
+	}
+
+	public function getLastBrandCodeIDsUpdate() {
+		$whereCondition = array($key => $LastInsertID, "Status"=> 1);
+		$CodeID = 	$this->SelectQuery($tableName, "ID", $whereCondition );
+	}
+
+	 /* public function SaveParentChildUpdate( $data,$parent, $child, $childCode, $key,$key2,$id ) {
+		
+		$LastInsertID = $this->db->insert_id();
+			$data[$childCode] =	array_map( function( $ArrayValue) use($key, $LastInsertID ) {
+					$ArrayValue[$key] = $LastInsertID;
+					return $ArrayValue;
+				}, array_values( $data[$childCode]));
+
+			$flag =  $this->db->insert_batch( $childCode , $data[$childCode] ); 
+			$CodeIDarr = $this->getLastBrandCodeIDsUpdate($data,$child,$LastInsertID, $childCode, $key, $key2, $id);
+		//  return flase;
+	}*/
+
+	/* public function getLastBrandCodeIDsUpdsate($data,$child,$LastInsertID, $tableName, $key, $key2, $id) {
+		$whereCondition = array($key => $LastInsertID, "Status"=> 1);
+		$CodeID = 	$this->SelectQuery($tableName, "ID", $whereCondition );
+		$dataChildArr = array();
+		// echo $key;
+		// 	print_r($CodeID);
+			
+			foreach ($CodeID as $BrandCodekey => $BrandCodevalue) {
+				$dataChildArr =	array_merge($dataChildArr, array_map( function( $ArrayValues) use($key2,$key,$LastInsertID, $BrandCodevalue, $id ) {
+					$ArrayValues[$key2] = $BrandCodevalue->ID;
+					$ArrayValues[$key] = $id;
+					return $ArrayValues;
+				},  $data[$child]));
+			}
+		$data[$child] = $dataChildArr;
+		// print_r($dataChildArr);exit;
+		$flag =  $this->db->insert_batch( $child , $data[$child] ); 
+
+		if ($this->db->trans_status() === FALSE) {
+			$this->db->trans_rollback();
+		} else {
+			$this->db->trans_commit();
+		}
+	}*/
+
+
+
+	public function SaveAll( $data,$parent, $child, $childCode, $key, $key2 ) {
 		$this->db->trans_begin();
 		$this->db->trans_strict( FALSE );
-	
+
 		if( $this->db->insert($parent, $data[$parent]) ) {
-			if( !empty( $child ) && !empty( $data[$child]) ) {
+			if(!empty( $childCode ) && !empty( $data[$child]) ) {
+				$this->SaveParentChild( $data,$parent, $child, $childCode, $key,$key2 );
+			} elseif( !empty( $child ) && !empty( $data[$child]) ) {
 				$LastInsertID = $this->db->insert_id();
 
 			$data[$child] =	array_map( function( $ArrayValue) use($key, $LastInsertID ) {
@@ -152,5 +216,42 @@ class BaseController extends CI_Controller {
 		}
 
 		return true;
+	}
+
+	public function SaveParentChild( $data,$parent, $child, $childCode, $key,$key2 ) {
+		
+		$LastInsertID = $this->db->insert_id();
+			$data[$childCode] =	array_map( function( $ArrayValue) use($key, $LastInsertID ) {
+					$ArrayValue[$key] = $LastInsertID;
+					return $ArrayValue;
+				}, array_values( $data[$childCode]));
+
+			$flag =  $this->db->insert_batch( $childCode , $data[$childCode] ); 
+			$CodeIDarr = $this->getLastBrandCodeIDs($data,$child,$LastInsertID, $childCode, $key, $key2);
+		 return flase;
+	}
+
+	public function getLastBrandCodeIDs($data,$child,$LastInsertID, $tableName, $key, $key2) {
+		$whereCondition = array($key => $LastInsertID, "Status"=> 1);
+		
+		$CodeID = 	$this->SelectQuery($tableName, "ID", $whereCondition,count($data[$tableName]) );
+		$dataChildArr = array();
+
+			foreach ($CodeID as $BrandCodekey => $BrandCodevalue) {
+				$dataChildArr =	array_merge($dataChildArr, array_map( function( $ArrayValues) use($key2,$key,$LastInsertID, $BrandCodevalue ) {
+					$ArrayValues[$key2] = $BrandCodevalue->ID;
+					$ArrayValues[$key] = $LastInsertID;
+					return $ArrayValues;
+				},  $data[$child]));
+			}
+		$data[$child] = $dataChildArr;
+		
+		$flag =  $this->db->insert_batch( $child , $data[$child] ); 
+
+		if ($this->db->trans_status() === FALSE) {
+			$this->db->trans_rollback();
+		} else {
+			$this->db->trans_commit();
+		}
 	}
 }

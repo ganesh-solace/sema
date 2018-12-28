@@ -36,12 +36,18 @@
                     foreach ($SellerData as $SellerKey => $SellerValue) {
                          $OnlineSince = date("F d, Y", strtotime($SellerValue->CreatedDate)); ?>
                
-                <div class="col-md-5 padding-5"><span>Seller Name: </span></div><div class="col-md-3 padding-5"><span><?php echo $SellerData[0]->JPSellerName; ?></span></div><div class="col-md-4 padding-5"><span><a id="SellerContact">View Contact Details</a></span></div>
-                <div class="col-md-5 padding-5"><span>Business Name: </span></div><div class="col-md-7 padding-5"><span><?php echo $SellerValue->BusinessName; ?></span></div>
-                <div class="col-md-5 padding-5"><span>Online Since: </span></div><div class="col-md-7 padding-5"><span><?php echo $OnlineSince; ?></span></div>
-                <div class="col-md-5 padding-5"><span>JustParts Seller ID: </span></div><div class="col-md-7 padding-5"><span><?php echo $SellerValue->JPSellerID; ?></span></div>
-                <div class="col-md-5 padding-5"><span>Webstore URL: </span></div><div class="col-md-7 padding-5"><span><?php echo $SellerValue->WebstoreURL; ?></span></div>
-                <div class="col-md-5 padding-5"><span>JustParts FTP Name: </span></div><div class="col-md-7 padding-5"><span><?php echo $SellerValue->JPFTPName; ?></span></div>
+                <div class="row">
+                <div class="col-md-5 padding-5"><span>Seller Name: </span></div><div class="col-md-3 padding-5"><span><?php echo $SellerData[0]->JPSellerName; ?></span></div><div class="col-md-4 padding-5"><span><a id="SellerContact">View Contact Details</a></span></div></div>
+                 <div class="row">
+                <div class="col-md-5 padding-5"><span>Business Name: </span></div><div class="col-md-7 padding-5"><span><?php echo $SellerValue->BusinessName; ?></span></div></div>
+                 <div class="row">
+                <div class="col-md-5 padding-5"><span>Online Since: </span></div><div class="col-md-7 padding-5"><span><?php echo $OnlineSince; ?></span></div></div>
+                 <div class="row">
+                <div class="col-md-5 padding-5"><span>JustParts Seller ID: </span></div><div class="col-md-7 padding-5"><span><?php echo $SellerValue->JPSellerID; ?></span></div></div>
+                 <div class="row">
+                <div class="col-md-5 padding-5"><span>Webstore URL: </span></div><div class="col-md-7 padding-5"><span><?php echo $SellerValue->WebstoreURL; ?></span></div></div>
+                 <div class="row">
+                <div class="col-md-5 padding-5"><span>JustParts FTP Name: </span></div><div class="col-md-7 padding-5"><span><?php echo $SellerValue->JPFTPName; ?></span></div></div>
               <?php   }              
                 } ?>
             </div>
@@ -54,20 +60,23 @@
                     foreach ($BrandData as $BrandKey => $BrandValue) {
                         $AssociateDate = date("F d, Y", strtotime($BrandValue['CreatedDate'])); 
                     ?>                    
-                
-                <div class="col-md-5 padding-5"><span>Associated Date: </span></div><div class="col-md-7 padding-5"><span><?php echo $AssociateDate; ?></span></div>
+                <div class="row">
+                <div class="col-md-5 padding-5"><span>Associated Date: </span></div><div class="col-md-7 padding-5"><span><?php echo $AssociateDate; ?></span></div></div>
+                <div class="row">
                 <div class="col-md-5 padding-5"><span>Last Data Refresh: </span></div>
                 <?php 
                     if( isset( $LastDataRefresh ) && !empty( $LastDataRefresh ) ) {
                         $Time = date("h:i:s A", strtotime($LastDataRefresh['LastDataRefresh'] ) );
                         $LastDataRefresh = date("F d, Y", strtotime($LastDataRefresh['LastDataRefresh'] ) )." at ".$Time;
-                        ?><div class="col-md-7 padding-5"><span><?php echo $LastDataRefresh; ?></span></div><?php
+                        ?><div class="col-md-7 padding-5"><span><?php echo $LastDataRefresh; ?></span></div></div><?php
                     } else {
-                        ?> <div class="col-md-7 padding-5"><span> - </span></div> <?php
+                        ?> <div class="col-md-7 padding-5"><span> - </span></div> </div><?php
                     }                    
                     ?>
-                <div class="col-md-5 padding-5"><span>Number of Items: </span></div><div class="col-md-7 padding-5"><span><?php echo $BrandValue['NumberOfItem']; ?></span></div>
-                <div class="col-md-5 padding-5"><span>SEMA Brand Class: </span></div><div class="col-md-7 padding-5"><span><?php echo $BrandValue['ClassName'];?></span></div>
+                <div class="row">
+                <div class="col-md-5 padding-5"><span>Number of Items: </span></div><div class="col-md-7 padding-5"><span><?php echo $BrandValue['NumberOfItem']; ?></span></div></div>
+                <div class="row">
+                <div class="col-md-5 padding-5"><span>SEMA Brand Class: </span></div><div class="col-md-7 padding-5"><span><?php echo $BrandValue['ClassName'];?></span></div></div>
                    <?php }
                 } ?>
             </div>
@@ -162,12 +171,16 @@
             <?php
               $attributes = array( 'id' => 'PriceAdjustment');
               echo form_open('sellers/PriceAdjustment', $attributes);
+              
                $BrandID = array( 'name' => 'BrandID','type'=>"hidden","value"=>$BrandData[0]["ID"]);
                echo form_input($BrandID);
                 $SellerID = array( 'name' => 'SellerID','type'=>"hidden", "value"=>$SellerData[0]->ID);
                echo form_input($SellerID);
                  $BrandNameArr = array( 'name' => 'BrandName','type'=>"hidden", "value"=>$BrandName);
                echo form_input($BrandNameArr);
+            //    print_r($BrandData[0]["CodeID"]);exit;
+                  $BrandCodeArr = array( 'name' => 'CodeID','type'=>"hidden", "value"=>$BrandData[0]["CodeID"]);
+               echo form_input($BrandCodeArr);
 
             ?>
               <div class="form-group">
@@ -235,6 +248,7 @@
   <?php
   $SellerID = $SellerData[0]->ID;
   $BrandID = $BrandData[0]["ID"];
+  $CodeID = $BrandData[0]["CodeID"];
   ?>
 <script type="text/javascript">
     jQuery( document ).ready(function( $ ) {
@@ -264,7 +278,9 @@
         $("#UpdateDataFile").click(function() {
             var SellerID = "<?php echo $SellerID; ?>";
             var BrandID = "<?php echo $BrandID; ?>";
-            var FormData = { "BrandID" : BrandID, "SellerID" : SellerID, "DataFeed" : $(".input-data-feed").val() };
+            var CodeID = "<?php echo $CodeID; ?>";
+            var FormData = { "BrandID" : BrandID, "SellerID" : SellerID,"CodeID": CodeID, "DataFeed" : $(".input-data-feed").val() };
+            
             var AjaxUrl = "<?php base_url(); ?>"+"sellers/UpdateDataFeedFile";
             var ChangeDataXLSURL = "<?php echo WEBSTORE_AUTOMATE_URL; ?>";
              $.ajax({
@@ -291,7 +307,8 @@
 
         $("#Previous").click(function() {
             var BrandID = "<?php echo $BrandData[0]["ID"]; ?>";
-            var data = { 'id': BrandID };
+            var CodeID = "<?php echo $BrandData[0]["CodeID"]; ?>";
+            var data = { 'id': BrandID,"CodeID" :CodeID };
             var url = "<?php base_url()?>summary";
              url_redirect({url:url,  method: "post",data: data});
         });

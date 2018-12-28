@@ -23,11 +23,24 @@
                     </div>
                     <div class="col-md-6">
                         <?php    
-                        $BrandAttr = array('id'       => 'BrandDropDown','class'=> 'form-control');
+                        // $BrandAttr = array('id'       => 'BrandDropDown','class'=> 'form-control');
                         $BrandID = isset( $BrandID ) ? $BrandID : 0 ;
-                        echo form_dropdown('BrandID', $BrandList,$BrandID, $BrandAttr); ?>
-                        <input type="hidden" name="BrandID", id="InputBrandID" value="<?php echo $BrandID; ?>" />
+                        $CodeID = isset( $CodeID ) ? $CodeID : 0 ;
+                        // echo form_dropdown('BrandID', $BrandList,$BrandID, $BrandAttr); ?>
+                        <!-- <input type="hidden" name="BrandID", id="InputBrandID" value="<?php //echo $BrandID; ?>" /> -->
 
+                        <select id ='BrandDropDown' class= 'form-control'>
+                        <option>--- Choose Brand ---</option>
+                            <?php
+                                foreach ($BrandList as $BrandKey => $BrandValue) {
+                                    foreach ($BrandValue["BrandCode"] as $CodeKey => $CodeValue) {  ?>                                      
+                                       <option value="<?php echo $CodeValue["value"];?>" brand_id="<?php echo $BrandValue["BrandName"]["value"] ?>"><?php echo $CodeValue["text"];?></option>
+                                <?php     }
+                                }
+                            ?>
+                        </select>
+                        <input type="hidden" name="BrandID", id="InputBrandID" value="<?php echo $BrandID; ?>" />
+                        <input type="hidden" name="CodeID", id="InputCodeID" value="<?php echo $CodeID; ?>" />
                     </div>
                 </div>
             </div>
@@ -122,28 +135,37 @@
     //     // }
     // }
 
-        var BrandID = "<?php echo $BrandID; ?>";
+        var BrandID = "<?php echo $BrandID; ?>";        
+        var CodeID = "<?php echo $CodeID; ?>";
         if( BrandID != 0  ) {
             $("#BrandDropDown").prop("disabled", true);
+            // var id = $("#BrandDropDown").find('option:selected').attr("brand_id");
         }
         // if value is deafult selected display the respective seller
-        MultiCheckAjaxCall($("#BrandDropDown").val());
+       MultiCheckAjaxCall(BrandID,CodeID);
 
         // change the brands and dislay the default seller selected
         $("select#BrandDropDown").change(function() {
-            $("#InputBrandID").val($(this).val());
-             MultiCheckAjaxCall( $("#BrandDropDown").val() );
+            
+            var id = $(this).find('option:selected').attr("brand_id");
+            ;
+            var CodeID = $(this).val();
+            $("#InputBrandID").val(id)
+            $("#InputCodeID").val(CodeID);
+             MultiCheckAjaxCall( id, CodeID );
         });
 
         // common ajax call for document ready and on change of brand  drop down        
-        function MultiCheckAjaxCall( BrandID ) {
-             var data = {"BrandID" : BrandID };
+        function MultiCheckAjaxCall( BrandID, CodeID ) {
+             var data = {"BrandID" : BrandID, "CodeID" : CodeID };
+             
             $.ajax({
                 url: "<?php echo base_url();?>"+"sellers/AjaxgetSellerID",
                 type: 'POST',                    
                 dataType: "json",                    
                 data: data,
                 success: function(data) {
+                    console.log(data);
                     var SellerID = data.SellerID;
                     if( !$.isEmptyObject({ SellerID }) ) {
                         if( SellerID[0]['SellerID'] != null) {

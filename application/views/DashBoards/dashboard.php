@@ -21,15 +21,23 @@
             <div class="row">
                 <?php            
                      if( isset( $RecentBrandList ) && !empty( $RecentBrandList ) ) {
-                        foreach ($RecentBrandList as $Brandkey => $Brandvalue) {
-                            if($Brandkey != 0 ) { ?>
+                        foreach ($BrandListWithCode as $Brandkey => $Brandvalue) {
+                           ?>
                               <div class="col-md-4 padding-5 cursor">
-                                  <a value="<?php echo $Brandkey; ?>" class="BrandName"><?php echo $Brandvalue; ?></a> 
-
+                                <?php $BrandvalueId = str_replace(" ","_",$Brandvalue["BrandName"]["text"]); ?>
+                                  <a value="<?php echo $Brandvalue["BrandName"]["value"]; ?>" class="BrandName"  data-toggle="collapse" href="#<?php echo $BrandvalueId;?>"><?php echo $Brandvalue["BrandName"]["text"]; ?>
+                                 
+                                  </a> 
+                                 <ul class="BrandCode" id="<?php echo $BrandvalueId;?>">
+                                   <?php
+                                        foreach ($Brandvalue["BrandCode"] as $CodeKey => $CodeValue) { ?>
+                                          <li value="<?php echo $CodeValue["value"];?>"><?php echo $CodeValue["text"]; ?></li>  
+                                     <?php 
+                                       }
+                                   ?>
+                                   </ul>
                               </div>
-
-                <?php
-                            }
+                <?php                            
                         }
                      }
                 ?>
@@ -44,10 +52,9 @@
                     <?php
                         if ( isset( $BrandList ) && !empty( $BrandList ) ) {
                             foreach ($BrandList as $Brandk => $Brandv) {
-                                if( $Brandk != 0 ){
-                                ?>
-                                <option value="<?php echo $Brandk; ?>"><?php echo $Brandv; ?></option>
-                    <?php
+                                foreach ($Brandv["BrandCode"] as $CodeKey => $CodeValue) {?>
+                                    <option value="<?php echo $CodeValue["value"]; ?>" brand_id="<?php echo $Brandv["BrandName"]["value"]?>"><?php echo  $CodeValue["text"]; ?></option>
+                                <?php
                                 }
                             }
                         }
@@ -71,11 +78,12 @@
                     <ul class="dropdown-menu" style="width:45%" id="EditBrand" aria-labelledby="dropdownMenuButton">
                     <?php if( isset( $BrandList ) && !empty( $BrandList )){
                         foreach ($BrandList as $Brandkey => $Brandvalue) {
-                            if($Brandkey != 0) { ?>
-                            <li value="<?php echo $Brandkey; ?>"><?php echo $Brandvalue;?></li>
+                            // print_r($Brandvalue["BrandName"]);
+                            ?>
+                            <li value="<?php echo $Brandvalue["BrandName"]["value"]; ?>"><?php echo $Brandvalue["BrandName"]["text"];?></li>
 
                     <?php
-                            }
+                            
                         }
                     }?>
                     </ul>
@@ -140,15 +148,28 @@
             $( "#append_brand_form" ).modal( "show" );
         });
         // on click if recent brand 
-        $("a.BrandName").click(function() {
-            var data = {'id': $(this).attr('value')};
+        $("a.BrandName").dblclick(function() {
+        //   var CodeID = $(this).children("ul").children("li").eq(0).attr("value");
+         var CodeID = $(this).next("ul").children("li").eq(0).attr("value");
+        
+            var data = {'id': $(this).attr('value'),"CodeID": CodeID};
             var url = "<?php base_url()?>summary";
              url_redirect({url:url,  method: "post",data: data});
         });
 
-        // von click of view brand deatils drop down
+        $("ul.BrandCode li").click(function(){
+            var CodeID = $(this).attr("value");
+            var id = $(this).parent("ul").prev("a.BrandName").attr("value");
+            var dataS = {'id':id,"CodeID": CodeID};
+            // console.log($(this).parent("ul").prev("a.BrandName"));return false;
+            var url = "<?php base_url()?>summary";
+             url_redirect({url:url,  method: "post",data: dataS});
+        });
+        // on click of view brand deatils drop down
         $("Select#ViewBrandDetails").change(function(){
-                var data = {'id': $(this).val()};
+            var CodeID = $(this).val();            
+            var id = $(this).find('option:selected').attr("brand_id");
+            var data = {"id":id, "CodeID" : CodeID};
                 var url = "<?php base_url()?>summary";
                  url_redirect({url:url,  method: "post",data: data});
         });
