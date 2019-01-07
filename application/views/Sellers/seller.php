@@ -143,6 +143,18 @@
                 <div class="col-md-7 input-xls"><?php echo $DataFeedXLS;?></div>
             </div>
             
+           <!--   <div class="row border-bottom padding-5">
+                <h4><strong>Generate a script for Brand</strong></h4>
+            </div>
+            <div class="row padding-5">
+              <div class="col-md-6"><label><?php //echo $BrandName;  echo "  - ".$SellerData[0]->JPSellerName."( ".$SellerData[0]->FirstName." ".$SellerData[0]->LastName." )"; ?></label></div>
+              <div class="col-md-6 text-right"><?php
+                  // $GenerateExtra = array( 'class' => 'btn btn-primary',"id" => 'Generate');
+                  //+ echo form_button('Generate','Generate', $GenerateExtra);
+                ?></div>
+                
+                
+            </div> -->
         </div>
         
     </div>
@@ -178,7 +190,6 @@
                echo form_input($SellerID);
                  $BrandNameArr = array( 'name' => 'BrandName','type'=>"hidden", "value"=>$BrandName);
                echo form_input($BrandNameArr);
-            //    print_r($BrandData[0]["CodeID"]);exit;
                   $BrandCodeArr = array( 'name' => 'CodeID','type'=>"hidden", "value"=>$BrandData[0]["CodeID"]);
                echo form_input($BrandCodeArr);
 
@@ -234,10 +245,10 @@
                 </div>
 
              <div class="row padding-5 text-right margin-right-0">  
-                <?php $SubmitExtra = array( 'class' => 'btn btn-default',"id" => 'FormSubmit');
+                <?php $SubmitExtra = array( 'class' => 'btn btn-primary',"id" => 'FormSubmit');
                         echo form_submit('Submit','Submit', $SubmitExtra);
                         
-                        $ButtonExtra = array( 'class' => 'btn btn-default',"data-dismiss"=> "modal","id" => 'ModalClose');
+                        $ButtonExtra = array( 'class' => 'btn btn-danger',"data-dismiss"=> "modal","id" => 'ModalClose');
                         echo form_button('Close','Close', $ButtonExtra);
                         ?>
             <?php echo form_close();?>
@@ -249,9 +260,23 @@
   $SellerID = $SellerData[0]->ID;
   $BrandID = $BrandData[0]["ID"];
   $CodeID = $BrandData[0]["CodeID"];
+  $GenerateBrandName = $BrandData[0]["Name"];
   ?>
 <script type="text/javascript">
     jQuery( document ).ready(function( $ ) {
+
+        // Generate a script for the brand seller
+
+          $("#Generate").click(function() {
+            var GenerateBrandName = "<?php echo $GenerateBrandName; ?>";
+            var data = { 'GenerateBrandName': GenerateBrandName };
+            var url = "<?php base_url()?>sellers/GenerateBrandScript";
+            alert("hi");
+             url_redirect({url:url,  method: "post",data: data});
+
+            // alert(GenerateBrandName.trim());
+            return false;
+          });
         //open seller contact form 
         $("#SellerContact").click(function() {
             var PostURL = "<?php echo base_url().'sellers/SellerContactDetails'; ?>" ;
@@ -305,6 +330,7 @@
                 });
         });
 
+        // got to previous page i.e summary page
         $("#Previous").click(function() {
             var BrandID = "<?php echo $BrandData[0]["ID"]; ?>";
             var CodeID = "<?php echo $BrandData[0]["CodeID"]; ?>";

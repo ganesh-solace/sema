@@ -62,10 +62,10 @@
             </div>
             <div class="form-group">
                     <div class="row text-right margin-right-0">
-                        <?php $SubmitExtra = array( 'class' => 'btn btn-default',"id" => 'FormSubmit');
+                        <?php $SubmitExtra = array( 'class' => 'btn btn-primary',"id" => 'FormSubmit');
                         echo form_submit('Submit','Submit', $SubmitExtra);
                         
-                        $ButtonExtra = array( 'class' => 'btn btn-default',"data-dismiss"=> "modal","id" => 'ModalClose');
+                        $ButtonExtra = array( 'class' => 'btn btn-danger',"data-dismiss"=> "modal","id" => 'ModalClose');
                         echo form_button('Close','Close', $ButtonExtra);
                         ?>
                     </div>

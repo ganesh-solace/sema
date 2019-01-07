@@ -63,7 +63,7 @@
                
                 <div class="row text-right padding-20">
             <?php
-                 $ButtonExtra = array( 'class' => 'btn btn-default',"data-dismiss"=> "modal","id" => 'ModalClose');
+                 $ButtonExtra = array( 'class' => 'btn btn-danger',"data-dismiss"=> "modal","id" => 'ModalClose');
                  echo form_button('Close','Close', $ButtonExtra);
             ?>
             </div>

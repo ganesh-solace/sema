@@ -97,14 +97,14 @@
             </div>
 
             <div class="row padding-5">
-                <button type="button" id="AssociateSeller" class="btn btn-default btn-block">Associate New Seller</button>
+                <button type="button" id="AssociateSeller" class="btn btn-warning btn-block">Associate New Seller</button>
             </div>
 
             <div class="row border-bottom padding-5">
                 <div class="col-md-6"> <h4><strong>Set Title Configuration</strong></h4></div>               
             </div>
              <div class="row">
-                    <div class="col-md-6 padding-5"><button type="button" id="SetTitle" class="btn btn-default btn-block">Set Title</button></div>
+                    <div class="col-md-6 padding-5"><button type="button" id="SetTitle" class="btn btn-warning btn-block">Set Title</button></div>
                     <div class="col-md-6 padding-5">
                     <?php
                         $TitleDisplaylabel = "-";
@@ -117,6 +117,17 @@
                     <label><?php echo $TitleDisplaylabel; ?></label>
                     </div>
                 </div>
+
+                <div class="row border-bottom padding-5">
+                <div class="col-md-6"> <h4><strong>Set Tag Configuration</strong></h4></div>             
+            </div>
+            <div class="row">
+                    <div class="col-md-5 padding-5"><button type="button" id="SetTag" class="btn btn-warning btn-block">Add Tag</button></div>
+                    <div class="col-md-7 padding-5 text-center">
+                   		<div  class="color-blue" id="AllTags"> view All Tags</div>
+                    </div>
+                </div>
+
         </div>
     </div>
     <div class="row padding-5 pull-right">
@@ -172,6 +183,33 @@ jQuery( document ).ready(function( $ ) {
             $( "div.modal-backdrop" ).addClass( "show" );    
             $( "#append_brand_form" ).load( "<?php echo base_url().'summary/SetDisplayTitle'; ?> " , BrandData );
             $( "#append_brand_form" ).modal( "show" );
+        });
+
+
+        $("#SetTag").click(function(){
+			var BrandName = "<?php echo $BrandData[0]["AppendBrandCode"]; ?>";
+			var BrandID = "<?php echo $BrandData[0]["ID"]; ?>";
+			var CodeID = "<?php echo $BrandData[0]["CodeID"]; ?>";
+			var data = {"BrandName": BrandName,"BrandID":BrandID,"CodeID":CodeID};
+			// console.log(data);return false;
+			var url = "<?php base_url()?>TagManagements/DisplayTagPopUp";
+			//  url_redirect({url:url,  method: "post",data: data});
+			$( "div.modal-backdrop" ).removeClass( "hide" );            
+            $( "div.modal-backdrop" ).addClass( "show" );    
+            $( "#append_brand_form" ).load( "<?php echo base_url().'TagManagements/DisplayTagPopUp'; ?> " , data );
+			$( "#append_brand_form" ).modal( "show" );
+        });
+
+        $("#AllTags").click(function() {
+        	var BrandName = "<?php echo $BrandData[0]["AppendBrandCode"]; ?>";
+			var BrandID = "<?php echo $BrandData[0]["ID"]; ?>";
+			var CodeID = "<?php echo $BrandData[0]["CodeID"]; ?>";
+			var data = {"BrandName": BrandName,"BrandID":BrandID,"CodeID":CodeID};
+			// console.log(data);return false;
+			$( "div.modal-backdrop" ).removeClass( "hide" );            
+            $( "div.modal-backdrop" ).addClass( "show" );    
+            $( "#append_brand_form" ).load( "<?php echo base_url().'TagManagements/ViewAllTagsPopUp'; ?> " , data );
+			$( "#append_brand_form" ).modal( "show" );
         });
 });
 </script>

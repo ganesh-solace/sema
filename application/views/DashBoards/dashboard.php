@@ -71,10 +71,10 @@
                 <h4>Data File Administration</h4>
             </div>
             <div class="row padding-5">
-                <button type="button" id="AddNewBrand" class="btn btn-default btn-block">Add Brand</button>
+                <button type="button" id="AddNewBrand" class="btn btn-primary btn-block">Add Brand</button>
             </div>
             <div class="row padding-5 dropdown display-list show">
-                    <button class="btn btn-default btn-block btn dropdown-toggle" data-toggle="dropdown">Edit Brand <span class = "caret pull-right"></span></button>
+                    <button class="btn btn-info btn-block btn dropdown-toggle" data-toggle="dropdown">Edit Brand <span class = "caret pull-right"></span></button>
                     <ul class="dropdown-menu" style="width:45%" id="EditBrand" aria-labelledby="dropdownMenuButton">
                     <?php if( isset( $BrandList ) && !empty( $BrandList )){
                         foreach ($BrandList as $Brandkey => $Brandvalue) {
@@ -91,7 +91,7 @@
               <!-- <button type="button" id="EditBrand" class="btn btn-default btn-block"></button>-->
             </div> 
             <div class="row padding-5">
-                <button type="button" id="AssociateSeller" class="btn btn-default btn-block">Associate New Seller</button>
+                <button type="button" id="AssociateSeller" class="btn btn-warning btn-block">Associate New Seller</button>
             </div>
             <!-- Reports -->
             <div class="row border-bottom padding-5">

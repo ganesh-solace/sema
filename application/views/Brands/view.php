@@ -29,7 +29,7 @@
             </nav>
             </div>
             <div class="col-md-4 text-right padding-20">
-                <?php  $ButtonExtra = array( 'class' => 'btn btn-default',"data-dismiss"=> "modal","id" => 'ModalClose');
+                <?php  $ButtonExtra = array( 'class' => 'btn btn-danger',"data-dismiss"=> "modal","id" => 'ModalClose');
                         echo form_button('Close','Close', $ButtonExtra);?>   
             </div>
             </div>            

@@ -68,7 +68,7 @@
                      <div class="row add-code-row">
                          <?php
                          $BrandCodeAttr = array( 'id' => 'BrandCode','class'=> "form-control input-count", "status" => 1);
-                         $AddNewButton = array( 'class' => 'btn btn-default',"id" => 'AddNewRow');
+                         $AddNewButton = array( 'class' => 'btn btn-success',"id" => 'AddNewRow');
                          ?>
                          <div class="col-md-4"> <?php echo form_label('Brand Code :','BrandCode'); ?> </div>
                           <div class=" col-md-2">
@@ -123,10 +123,10 @@
                 </div>
                  <div class="form-group">
                     <div class="row text-center">
-                        <?php $SubmitExtra = array( 'class' => 'btn btn-default',"id" => 'FormSubmit');
+                        <?php $SubmitExtra = array( 'class' => 'btn btn-primary',"id" => 'FormSubmit');
                         echo form_submit('Submit','Submit', $SubmitExtra);
                         
-                        $ButtonExtra = array( 'class' => 'btn btn-default',"data-dismiss"=> "modal","id" => 'ModalClose');
+                        $ButtonExtra = array( 'class' => 'btn btn-danger',"data-dismiss"=> "modal","id" => 'ModalClose');
                         echo form_button('Close','Close', $ButtonExtra);
                         ?>
                     </div>

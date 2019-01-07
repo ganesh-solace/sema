@@ -9,8 +9,15 @@
     if(isset($TitleDisplayData) && !empty($TitleDisplayData)){
         if(isset($TitleDisplayData[0]->BrandTitle)){
             $TitleDisplaylabel = $TitleDisplayData[0]->BrandTitle;
+            $TitleDisplaylabel = explode(",", $TitleDisplaylabel);
+            // unset($TitleDisplaylabel[0]);
+
+            $TitleDisplaylabel = array_map('trim', $TitleDisplaylabel);
+
+            $TitleDisplaylabel = implode(",", $TitleDisplaylabel);
         }
     }
+
     // print_r($TitleDisplaylabel);exit;
     // $TitleJSONData = json_encode($TitleData);
 ?>
@@ -52,10 +59,10 @@
 
             <div class="form-group">
                     <div class="row text-right margin-right-0">
-                        <?php $SubmitExtra = array( 'class' => 'btn btn-default',"id" => 'FormSubmit');
+                        <?php $SubmitExtra = array( 'class' => 'btn btn-primary',"id" => 'FormSubmit');
                         echo form_submit('Submit','Submit', $SubmitExtra);
                         
-                        $ButtonExtra = array( 'class' => 'btn btn-default',"data-dismiss"=> "modal","id" => 'ModalClose');
+                        $ButtonExtra = array( 'class' => 'btn btn-danger',"data-dismiss"=> "modal","id" => 'ModalClose');
                         echo form_button('Close','Close', $ButtonExtra);
                         ?>
                     </div>
@@ -73,7 +80,8 @@
 
 	jQuery(document).ready(function( $ ){
 	// run callbacks
-        var TitleDisplaylabel =  "<?php echo trim($TitleDisplaylabel); ?>";   
+        var TitleDisplaylabel =  "<?php echo trim($TitleDisplaylabel); ?>"; 
+        // console.log(TitleDisplaylabel);  
         var StringVal = "";
         
 		$('#callbacks').multiSelect({
@@ -153,13 +161,12 @@
      function DisplaySelectedFields(TitleDisplaylabel) {
         TitleDisplaylabel = TitleDisplaylabel.split(',');
         var concat =concatStr=StringVal= "";
-           
         $.each($(".ms-selectable ul li.ms-elem-selectable"),function(Titleindex, Titlevalues) {
                 var CheckValTitle = $(this).children("span").html();
                 var Element = $(this);
 
             $.each(TitleDisplaylabel,function(index, values) {
-                if(CheckValTitle == values){
+                if(CheckValTitle.trim() == values.trim()){
                      Element.trigger("click");
                 }
             });

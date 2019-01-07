@@ -26,8 +26,8 @@ class Summary extends BaseController {
         $data["seller_list"] = $this->summary->getAssociateSellerListCode( $id, $CodeID );        
         // $data["NumberOfAssociateSeller"] = $this->summary->NumberOfAssociateSeller( $id );        
         $data["NumberOfAssociateSeller"] = $this->summary->NumberOfAssociateSellerCode( $id, $CodeID );
+    
         $data["TitleDisplayData"] = $this->GetFieldValues( $id, $CodeID )["TitleDisplayData"];
-        // print_r($data);exit;
         $this->template->load('template','summary',$data);	
         
     }
