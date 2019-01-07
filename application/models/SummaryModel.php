@@ -96,5 +96,14 @@ class SummaryModel extends CI_Model{
          return $query;
     }
 
+    public function GetTitleValues($Title) {
+         $this->db->select('GROUP_CONCAT(jp_fields) jp_fields');
+         $this->db->where("FIND_IN_SET(`text`, '".$Title."') !=", 0);         
+         $this->db->from("title_configuration");
+     $query = $this->db->get();
+     $query =  $query->result_array()[0];
+    
+     return $query;
+    }
     
 }

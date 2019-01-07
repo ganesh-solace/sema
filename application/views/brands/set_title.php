@@ -11,6 +11,7 @@
             $TitleDisplaylabel = $TitleDisplayData[0]->BrandTitle;
         }
     }
+    // print_r($TitleDisplaylabel);exit;
     // $TitleJSONData = json_encode($TitleData);
 ?>
 <div id="myModal" class="modal fade" role="dialog">
@@ -72,7 +73,7 @@
 
 	jQuery(document).ready(function( $ ){
 	// run callbacks
-        var TitleDisplaylabel =  "<?php echo $TitleDisplaylabel ?>";   
+        var TitleDisplaylabel =  "<?php echo trim($TitleDisplaylabel); ?>";   
         var StringVal = "";
         
 		$('#callbacks').multiSelect({
@@ -92,9 +93,16 @@
 			afterDeselect: function(values){
                 concatStr = ",";
                 var selectedText =  $("#callbacks option[value='"+values+"']").text();
-                selectedText = selectedText+ concatStr;
+
+                var result = StringVal.split(',');
+                    for (var key in result) {
+                        if (result[key].trim() == selectedText.trim()) {
+                              result.splice(key, 1);
+                        }
+                    }
+                    
+                    StringVal = result.join(", ");
                 $("#"+values).parent("span.count-class").remove();
-                StringVal = StringVal.replace(selectedText,'');
                 $(".set-input").val(StringVal);
 			}
 		});
@@ -113,6 +121,7 @@
 
         $("#FormSubmit").click(function(){
             var StringVal = $(".set-input").val();
+            console.log(StringVal);
                 StringVal = StringVal.replace(",", " - ");
             $.confirm({
                 title: 'Title Configuration !',                

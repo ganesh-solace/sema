@@ -1,4 +1,4 @@
-    <?php 
+<?php 
     $ClassID = (isset($BrandData[0]) && !empty($BrandData[0]->ClassID)) ?  $BrandData[0]->ClassID : null;
     $ID = (isset($BrandData[0]) && !empty($BrandData[0]->ID)) ?  $BrandData[0]->ID : null;
     $Code = (isset($BrandData[0]) && !empty($BrandData[0]->Code)) ?  $BrandData[0]->Code : '';
@@ -28,9 +28,9 @@
                     echo form_open('brands/'.$action, $attributes);
                     //   $BrandPostID = array( 'name' => 'ID', "value" => $ID, id="BrandID" 'type'=> 'hidden');
                     // echo form_input($BrandPostID);
-                      $BrandPostID = array( 'name' => 'ID', "value" => $ID,'type'=> 'hidden');
+                      $BrandPostID = array( 'name' => 'Brand[ID]', "value" => $ID,'type'=> 'hidden');
                     echo form_input($BrandPostID);
-                    $BrandPostCode = array( 'name' => 'Code', "value" => $Code,'type'=> 'hidden');
+                    $BrandPostCode = array( 'name' => 'Brand[Code]', "value" => $Code,'type'=> 'hidden');
                     echo form_input($BrandPostCode);
                     ?>
                     
@@ -43,31 +43,16 @@
                             <?php 
                             // print_r($BrandData[0]);exit;
                             $BrandName =  isset($BrandData[0]) && !empty($BrandData[0]) ? $BrandData[0]->BrandName : "";
-                            $BrandNameAttribute = array( 'name' => 'Name','id' => 'BrandName','class'=> "form-control", "value" => $BrandName);
+                            $BrandNameAttribute = array( 'name' => 'Brand[Name]','id' => 'BrandName','class'=> "form-control", "value" => $BrandName);
                             echo form_input($BrandNameAttribute); ?>
                             <?php echo form_error('Brand name'); ?>
-                        </div>
-                    </div>
-                </div>
-                  <div class="form-group">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <?php echo form_label('Short Name :','ShortName'); ?>
-                        </div>
-                        <div class="col-md-6">
-                            <?php 
-                            // print_r($BrandData[0]);exit;
-                            $BrandName =  isset($BrandData[0]) && !empty($BrandData[0]) ? $BrandData[0]->ShortName : "";
-                            $BrandNameAttribute = array( 'name' => 'ShortName','id' => 'ShortName','class'=> "form-control", "value" => $BrandName);
-                            echo form_input($BrandNameAttribute); ?>
-                            <?php echo form_error('Short name'); ?>
                         </div>
                     </div>
                 </div>
                 <div class="form-group">
                      <div class="row add-code-row">
                          <?php
-                         $BrandCodeAttr = array( 'id' => 'BrandCode','class'=> "form-control input-count", "status" => 1);
+                         $BrandCodeAttr = array( 'name' => 'temp','id' => 'BrandCode','class'=> "form-control input-count", "status" => 1);
                          $AddNewButton = array( 'class' => 'btn btn-default',"id" => 'AddNewRow');
                          ?>
                          <div class="col-md-4"> <?php echo form_label('Brand Code :','BrandCode'); ?> </div>
@@ -86,7 +71,7 @@
                         <div class="col-md-6">
                             <?php 
                             $SemaBrandAlias =  isset($BrandData[0]) && !empty($BrandData[0]) ? $BrandData[0]->SemaBrandAlias : "";
-                            $SemaBrandAliasAttribute = array( 'name' => 'SemaBrandAlias','id' => 'SemaBrandAlias','class'=> "form-control", "value" => $SemaBrandAlias);
+                            $SemaBrandAliasAttribute = array( 'name' => 'Brand[SemaBrandAlias]','id' => 'SemaBrandAlias','class'=> "form-control", "value" => $SemaBrandAlias);
                             echo form_input($SemaBrandAliasAttribute); ?>
                             <?php echo form_error('Sema Brand Alias'); ?>
                         </div>
@@ -100,7 +85,7 @@
                         <div class="col-md-6">
                             <?php
                              $BrandDescription =  isset($BrandData[0]) && !empty($BrandData[0]) ? $BrandData[0]->Description : "";
-                            $BrandDescriptionAttribute = array('name'=> 'Description', 'id' => 'BrandDescription','value'=> $BrandDescription, 'rows' => '4','class'=> "form-control");
+                            $BrandDescriptionAttribute = array('name'=> 'Brand[Description]', 'id' => 'BrandDescription','value'=> $BrandDescription, 'rows' => '4','class'=> "form-control");
                                 echo form_textarea($BrandDescriptionAttribute);
                              ?>
                         </div>
@@ -116,7 +101,7 @@
                                         $js = array(  'id'       => 'SemaClassList' );
                 
                                         $SemaClassList =  (isset( $SemaClassList ) && !empty( $SemaClassList )) ? $SemaClassList : "";
-                                        echo form_multiselect('ClassID[]', $SemaClassList,'',$js); ?>
+                                        echo form_multiselect('Brand[]ClassID[]', $SemaClassList,'',$js); ?>
                             <?php echo form_error('Sema Class'); ?>
                         </div>
                     </div>
@@ -164,7 +149,7 @@
                 // } else {
                     generateHTMLString(Tevalue["BrandCode"], 0,Tevalue['ID']);
                 // }
-                console.log($("input[name='BrandCode[]']"));
+                // console.log($("input[name='BrandCode[]']"));
                 });
                 $("input[name='BrandCode[]']").prop("readonly",true);
             }
@@ -244,13 +229,14 @@
 
 
         $("#FormSubmit").click(function( e ) {     
+                   
             e.preventDefault();
              var BrandCode = "";
             if(typeof $("input[name='BrandCode[]']").val() != "undefined"){
                 BrandCode = $("input[name='BrandCode[]']").val();
             }
             var FormData = {   Name : $('#BrandName').val(), BrandCode: BrandCode   };
-
+            // console.log(FormData);return false;
                 var flag = false;
                 $.ajax({
                     url: "<?php echo base_url();?>"+"brands/ajaxValidation",
@@ -261,12 +247,11 @@
                        if( !$.isEmptyObject(data)) {
                           $("div.text-danger").remove(); 
                            $.each(data["error"], function(i,Values) {
-                                    // var ElementAddError =  $("input[name='"+Values["key"]+"']");
-                              var ElementAddError =  $("#BrandCode");
-
-                               if($("input[name='"+Values["key"]+"']").length > 0 ){
-                                     var ElementAddError =  $("input[name='"+Values["key"]+"']");
-                                }
+                                    var ElementAddError =  $("#BrandCode");
+                                    if($("input[name='"+Values["key"]+"']").length > 0 ){
+                                         var ElementAddError =  $("input[name='"+Values["key"]+"']");
+                                    }
+                                    // console.log($("input[name='"+Values["key"]+"']"));
                                     // if(Values["key"] == "BrandCode[]"){
                                     //     ElementAddError =ElementAddError.eq(0);
                                     // }

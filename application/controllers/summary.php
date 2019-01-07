@@ -45,9 +45,12 @@ class Summary extends BaseController {
         $BrandID = $this->input->post()["BrandID"];
         $ID = $this->input->post()["ID"];
         $Title = $this->input->post()["Title"];
+        $TitleValues = $this->summary->GetTitleValues($Title);
+        // print_r($Title);exit;
         $WhereCondition = array("BrandID" =>$BrandID, "ID" => $ID, "Status" => 1);
 
         $this->db->set('BrandTitle', $Title);
+        $this->db->set('BrandTitleValues', $TitleValues["jp_fields"]);
         $this->db->where( $WhereCondition );
         $this->db->update('brand_code_bridge');
         $_SESSION["summary"]["BrandID"] = $BrandID;

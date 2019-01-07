@@ -82,8 +82,7 @@ class Brand extends CI_Model{
     }
 
     public function EditDataPostDB($data) {
-        echo "<pre>";
-        // print_r($data);exit;
+        
         $BrandCodeDBData = $this->GetCodeBridgeData($data["ID"]);
         $BrandDataArr  = array();        
         $this->BrandDataUpDate($data);
@@ -98,8 +97,7 @@ class Brand extends CI_Model{
                 $BrandDataArr[$key]['ModifiedDate'] = date("Y-m-d H:i:s");   
                 $BrandDataArr[$key]['Status'] = 1;   
                 $BrandDataArr = array_values($BrandDataArr);
-                // print_r($BrandDataArr);
-                // exit;
+           
                 $this->db->insert_batch( "brand_code_bridge" , $BrandDataArr );
                 $LastInsertID  = $this->db->insert_id();
                 foreach ($data["ClassID"] as $Ckey => $Cvalue) {

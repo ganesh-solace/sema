@@ -56,7 +56,7 @@ class Brands extends BaseController {
 	// editPost: get the brand details from ID
 	public function getBrandsData( $id ) {	
 		$whereCondition = array( 'B.ID' => $id ,"BB.Status" => 1,"SB.Status"=>1 );
-		$this->db->select(' B.ID, B.Name BrandName,B.SemaBrandAlias,B.Description, GROUP_CONCAT(DISTINCT(BB.BrandCode)) BrandCode,GROUP_CONCAT(DISTINCT(SB.ClassID)) ClassID');    
+		$this->db->select(' B.ID, B.Name BrandName,B.SemaBrandAlias,B.ShortName,B.Description, GROUP_CONCAT(DISTINCT(BB.BrandCode)) BrandCode,GROUP_CONCAT(DISTINCT(SB.ClassID)) ClassID');    
 		$this->db->distinct();
 		$this->db->from('brands B');
 		$this->db->join('brand_code_bridge BB', 'BB.BrandID = B.ID ',"inner");	
@@ -77,6 +77,7 @@ class Brands extends BaseController {
 		if( $flag ) {		
 		   $BrandData = $this->input->post();
 		   $this->Brand->EditDataPostDB( $BrandData );
+		   $this->CreateBrandFloderFTP( $BrandData );
 		   redirect("DashBoards");
 		}		
 	}
@@ -96,7 +97,6 @@ class Brands extends BaseController {
 	public function add() {	
 		 if($this->input->method() == 'post') {
 			 $BrandData = $this->input->post();
-			 
 			 $BrandPostArr = $this->GenerateBrandPostData( $BrandData,"add" );
 			
 			 $this->saveAll( $BrandPostArr,$this->parent, $this->child, "$this->childCode",'BrandID',"BrandCodeID" );
@@ -111,7 +111,7 @@ class Brands extends BaseController {
 	
 	//add,edit: generate brands post data
 	public function GenerateBrandPostData( $BrandData, $action ) {		
-		// $this->CreateBrandFloderFTP( $BrandData );
+		$this->CreateBrandFloderFTP( $BrandData );
 		$BrandPostArr = array();		
 		if( isset( $BrandData['Code'] ) && !empty( $BrandData['Code'] )) {
 			$Code = $BrandData['Code'];
@@ -125,6 +125,7 @@ class Brands extends BaseController {
 		$this->id = $BrandPostArr['ID'];
 		$BrandPostArr['Code'] = $Code;
 		$BrandPostArr['Name'] = $BrandData['Name'];
+		$BrandPostArr['ShortName'] = $BrandData['ShortName'];
 		$BrandPostArr['SemaBrandAlias'] = $BrandData['SemaBrandAlias'];
 		$BrandPostArr['Description'] = $BrandData['Description'];
 		$BrandPostArr['Status'] = 1;
@@ -201,24 +202,34 @@ class Brands extends BaseController {
 		$config = unserialize(CONFIG);
 		$conn =  $this->ftp->connect($config);
 		
+
 		$BrandFolderName = strtolower( $FtpRequiredData["Name"] );
 		$BrandFolderName = str_replace(" ", "_", $BrandFolderName);
 
 		$CheckBrandDirPath = EXCEL_FILE_PATH.$BrandFolderName."/";
-		$WithFitmentDir = $CheckBrandDirPath."with_fitment/";
-		$WithoutFitmentDir = $CheckBrandDirPath."without_fitment/";
-		$ImagesDir = $CheckBrandDirPath."images/";
 
 		if(!is_dir($CheckBrandDirPath)) {
 			$this->ftp->mkdir($CheckBrandDirPath, 0777);
 			$this->ftp->chmod($CheckBrandDirPath, 0777);
-			$this->ftp->mkdir($WithFitmentDir, 0777);
-			$this->ftp->chmod($WithFitmentDir, 0777);
-			$this->ftp->mkdir($WithoutFitmentDir, 0777);
-			$this->ftp->chmod($WithoutFitmentDir, 0777);
-			$this->ftp->mkdir($ImagesDir, 0777);
-			$this->ftp->chmod($ImagesDir, 0777);
-		} 
+		}
+		foreach ($FtpRequiredData["BrandCode"] as $BrandKey => $BrandValue) {
+			$BrandValue = strtolower( $BrandValue );
+			$BrandValue = str_replace(" ", "_", $BrandValue);
+			$BrandValueFolderPath = $CheckBrandDirPath.$BrandValue."/";
+			if(!is_dir($BrandValueFolderPath)) {
+				$this->ftp->mkdir($BrandValueFolderPath, 0777);
+				$this->ftp->chmod($BrandValueFolderPath, 0777);
+				$WithFitmentDir = $BrandValueFolderPath."with_fitment/";
+				$WithoutFitmentDir = $BrandValueFolderPath."without_fitment/";
+				$ImagesDir = $BrandValueFolderPath."images/";
+				$this->ftp->mkdir($WithFitmentDir, 0777);
+				$this->ftp->chmod($WithFitmentDir, 0777);
+				$this->ftp->mkdir($WithoutFitmentDir, 0777);
+				$this->ftp->chmod($WithoutFitmentDir, 0777);
+				$this->ftp->mkdir($ImagesDir, 0777);
+				$this->ftp->chmod($ImagesDir, 0777);
+			}
+		}
 	}
 
 }
