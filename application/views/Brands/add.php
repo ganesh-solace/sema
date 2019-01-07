@@ -162,13 +162,36 @@
                 //     $("#BrandCode").val(Tevalue["BrandCode"]);
                 //     $("#BrandCode").parent("div").append('<input type="hidden" name="CodeID[]" value="'+Tevalue['ID']+'" />');
                 // } else {
-                    generateHTMLString(Tevalue["BrandCode"], 0,Tevalue['ID']);
+                    generateHTMLStringEditCase(Tevalue["BrandCode"], 0,Tevalue['ID'],index);
                 // }
                 console.log($("input[name='BrandCode[]']"));
                 });
                 $("input[name='BrandCode[]']").prop("readonly",true);
             }
         });          
+    }
+
+    function generateHTMLStringEditCase(Code, flag,CodeID,key) {
+          var BrandID = "<?php echo $ID; ?>";
+          var RowState = "436";
+          if(flag == 1) {
+              key = $(".input-count").length - 1;
+             var RowState = "435";
+          }
+         var GenerateAddHTMLStr = "";
+             GenerateAddHTMLStr += '<div class="row add-code-row">';
+             GenerateAddHTMLStr += '<div class="col-md-6"></div>';
+             GenerateAddHTMLStr += '<div class="col-md-4">';
+             GenerateAddHTMLStr += '<input type="text" class="form-control input-count readonly-set" name="Brand['+key+'][BrandCode]" value="'+Code+'" />';
+             GenerateAddHTMLStr += '<input type="hidden"  name="Brand['+key+'][CodeID]" value="'+CodeID+'" />';
+             GenerateAddHTMLStr += '<input type="hidden" id="RowState"  name="Brand['+key+'][RowState]" value="'+RowState+'" />';
+             GenerateAddHTMLStr +='</div>';
+             GenerateAddHTMLStr += '<div class="col-md-1 button-space"><button class="btn btn-default Delete-row-up" onclick="DeleteRow($(this),'+0+');">Del</button></div>';
+             GenerateAddHTMLStr +='</div>';
+
+             $("#AddNewRow").parents("div.row").find("#BrandCode").val("");
+             $("#AddNewRow").parents("div.row").after(GenerateAddHTMLStr);
+             setReadonlyAttribute( 0, "" );
     }
 
     // multiselect checkbox for class
@@ -183,50 +206,25 @@
             if(InputValue == "") {
                 alert("Please add brand Code");
             } else {
-                // if(action == "edit") disFlag = 0; else disFlag = 1;
-                generateHTMLString( InputValue,1,0 );
-                if(action == 'edit') {
-                    setReadonlyAttribute($(this));
-                }
+                generateHTMLStringEditCase( InputValue,1,0 );
+                // if(action == 'edit') {
+                //     setReadonlyAttribute($(this));
+                // }
+                setReadonlyAttribute(1,$(this));
             }
         });
        
-       function setReadonlyAttribute(obj) {
-           $("input[name='BrandCode[]']").prop("readonly",true);
-           obj.parent().next("div").children("input#BrandCode").attr("readonly",false);
-           var inputFielValue = obj.parent().next("div").children('input[type="hidden"]').val();
-           obj.parent().next("div").children('input[type="hidden"]').val(0);
-        obj.parent().parent(".add-code-row").next(".add-code-row").children("div.col-md-4").find('input[type="hidden"]').val(inputFielValue);
+       function setReadonlyAttribute(ReadonlyFlag, obj) {
            
-        //    console.log();
+           if(ReadonlyFlag == 0 ) {
+               $(".readonly-set").prop("readonly",true);
+           }
        }
 
-       function generateHTMLString( InputValue,flag,CodeID ) {
-            var GenerateAddHTMLStr = "";
-            GenerateAddHTMLStr += '<div class="row add-code-row">';
-            GenerateAddHTMLStr += '<div class="col-md-6"></div>';
-            GenerateAddHTMLStr += '<div class="col-md-4">';
-                GenerateAddHTMLStr += '<input type="text" class="form-control input-count" name="BrandCode[]" value="'+InputValue+'" status="1" />';
-            //      if(flag == 0 ) {
-            //          GenerateAddHTMLStr += '<input type="hidden"  name="CodeID" value="'+CodeID+'" />';
-            // }
-             GenerateAddHTMLStr += '<input type="hidden"  name="CodeID[]" value="'+CodeID+'" />';
-            GenerateAddHTMLStr += '</div>';
-           
-         //   GenerateAddHTMLStr += '<div class="col-md-2 button-space"><button class="btn btn-default">Edit</button>';
-          //  GenerateAddHTMLStr += '</div>';                    
-            GenerateAddHTMLStr += '<div class="col-md-1 button-space"><button class="btn btn-default Delete-row-up" onclick="DeleteRow($(this),'+flag+');">Del</button>';
-            GenerateAddHTMLStr += '</div>';
-            GenerateAddHTMLStr += '</div>';
-            if(flag != 0){
-                 $("#AddNewRow").parents("div.row").find("#BrandCode").val("");
-            } 
-            $("#AddNewRow").parents("div.row").after(GenerateAddHTMLStr);
-       }
+       
         // set class in edit mode
         if(ClassID != '') {
            var selectedOptions = ClassID.split(",");
-            // console.log( selectedOptions );
             for(var i in selectedOptions) {
             var optionVal = selectedOptions[i];
                 $("select").find("option[value="+optionVal+"]").prop("selected", "selected");
@@ -243,66 +241,59 @@
         });
 
 
-        $("#FormSubmit").click(function( e ) {     
-            e.preventDefault();
-             var BrandCode = "";
-            if(typeof $("input[name='BrandCode[]']").val() != "undefined"){
-                BrandCode = $("input[name='BrandCode[]']").val();
-            }
-            var FormData = {   Name : $('#BrandName').val(), BrandCode: BrandCode   };
+        // $("#FormSubmit").click(function( e ) {     
+        //     e.preventDefault();
+        //      var BrandCode = "";
+        //     if(typeof $("input[name='BrandCode[]']").val() != "undefined"){
+        //         BrandCode = $("input[name='BrandCode[]']").val();
+        //     }
+        //     var FormData = {   Name : $('#BrandName').val(), BrandCode: BrandCode   };
 
-                var flag = false;
-                $.ajax({
-                    url: "<?php echo base_url();?>"+"brands/ajaxValidation",
-                    type: 'POST',                    
-                    dataType: "json",                    
-                    data: FormData,
-                    success: function(data) {
-                       if( !$.isEmptyObject(data)) {
-                          $("div.text-danger").remove(); 
-                           $.each(data["error"], function(i,Values) {
-                                    // var ElementAddError =  $("input[name='"+Values["key"]+"']");
-                              var ElementAddError =  $("#BrandCode");
+        //         var flag = false;
+        //         $.ajax({
+        //             url: "<?php echo base_url();?>"+"brands/ajaxValidation",
+        //             type: 'POST',                    
+        //             dataType: "json",                    
+        //             data: FormData,
+        //             success: function(data) {
+        //                if( !$.isEmptyObject(data)) {
+        //                   $("div.text-danger").remove(); 
+        //                    $.each(data["error"], function(i,Values) {
+        //                             // var ElementAddError =  $("input[name='"+Values["key"]+"']");
+        //                       var ElementAddError =  $("#BrandCode");
 
-                               if($("input[name='"+Values["key"]+"']").length > 0 ){
-                                     var ElementAddError =  $("input[name='"+Values["key"]+"']");
-                                }
-                                    // if(Values["key"] == "BrandCode[]"){
-                                    //     ElementAddError =ElementAddError.eq(0);
-                                    // }
-                                   ElementAddError.after('<div class="text-danger">'+Values["value"]+'</div>');
+        //                        if($("input[name='"+Values["key"]+"']").length > 0 ){
+        //                              var ElementAddError =  $("input[name='"+Values["key"]+"']");
+        //                         }
+        //                             // if(Values["key"] == "BrandCode[]"){
+        //                             //     ElementAddError =ElementAddError.eq(0);
+        //                             // }
+        //                            ElementAddError.after('<div class="text-danger">'+Values["value"]+'</div>');
                                
-                           });
-                       }  else {
-                           if( $(".error").length > 0 ) $("div.text-danger").remove(); 
-                            beforeSumitAddStatusFeild();
-                            $("#BrandAdd").submit();
-                       }
-                    }
-                });
-        });
+        //                    });
+        //                }  else {
+        //                    if( $(".error").length > 0 ) $("div.text-danger").remove(); 
+        //                     beforeSumitAddStatusFeild();
+        //                     $("#BrandAdd").submit();
+        //                }
+        //             }
+        //         });
+        // });
     });
 
-function beforeSumitAddStatusFeild() {
-     $.each($("input[name='BrandCode[]']"), function(k,Status) {
-         $('<input />').attr('type', 'hidden')
-          .attr('name', "Status[]")
-          .attr('value',$(this).attr("status"))
-          .appendTo('#FormSubmit');
-     });
-}
+// function beforeSumitAddStatusFeild() {
+//      $.each($("input[name='BrandCode[]']"), function(k,Status) {
+//          $('<input />').attr('type', 'hidden')
+//           .attr('name', "Status[]")
+//           .attr('value',$(this).attr("status"))
+//           .appendTo('#FormSubmit');
+//      });
+// }
 
         function DeleteRow(e,flag) {
           event.preventDefault();
-        //   if(flag == 1) {
-        // e.parent().parent("div.row").remove();
-        // $(".Delete-row-up").parent().parent().find("input[name='BrandCode[]']").attr("status",0);
-        //   } else {
-              e.parent().parent("div.row").remove();
-        //       $(".Delete-row-up").parent().parent().find("input[name='BrandCode[]']").attr("status",0);
-        //   } 
-        //         e.parent().parent("div.row").css("display",'none');
-        // e.parent().parent().find("input[name='BrandCode[]']").attr("status",0);         
+          e.parent().parent("div.row").find("#RowState").val("437");
+          e.parent().parent("div.row").css("display","none");
         }
 
 

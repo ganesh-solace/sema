@@ -74,12 +74,11 @@ class Brands extends BaseController {
 		$id = $this->input->post()['ID'];
 		$flag = $this->deleteRecords( $id );		  
 	
-		if( $flag ) {		
-		   $BrandData = $this->input->post();
-		   $this->Brand->EditDataPostDB( $BrandData );
+		$BrandData = $this->input->post();
+		   $this->Brand->SaveData($BrandData);
 		   $this->CreateBrandFloderFTP( $BrandData );
 		   redirect("DashBoards");
-		}		
+			
 	}
 
 	//edit: update the status in edit case
@@ -88,7 +87,6 @@ class Brands extends BaseController {
 		$where = array("BrandID"=> $id );
 		$this->db->where($where);
 		$flag = $this->db->update('sema_brand_class_bridge', $data);
-		// exit;
 		return $flag;
 	}
 
@@ -96,10 +94,11 @@ class Brands extends BaseController {
 	//form action: add  brand data
 	public function add() {	
 		 if($this->input->method() == 'post') {
+
 			 $BrandData = $this->input->post();
-			 $BrandPostArr = $this->GenerateBrandPostData( $BrandData,"add" );
-			
-			 $this->saveAll( $BrandPostArr,$this->parent, $this->child, "$this->childCode",'BrandID',"BrandCodeID" );
+			 $Code = $this->GenerateCode('brands',"B");
+			 $this->Brand->AddNewBrand($BrandData);
+			 $this->CreateBrandFloderFTP( $BrandData );
 			 redirect("DashBoards");
 		 }
 		
@@ -108,66 +107,7 @@ class Brands extends BaseController {
 		$data['PageTitle'] = 'Add Brand';
 		$this->load->view ('brands/add',$data );
 	}
-	
-	//add,edit: generate brands post data
-	public function GenerateBrandPostData( $BrandData, $action ) {		
-		$this->CreateBrandFloderFTP( $BrandData );
-		$BrandPostArr = array();		
-		if( isset( $BrandData['Code'] ) && !empty( $BrandData['Code'] )) {
-			$Code = $BrandData['Code'];
-		} else {
-			$Code = $this->GenerateCode('brands',"B");
-		} 
-		
 
-		$TransactionDetails = $this->getTransactionDetails();
-		$BrandPostArr['ID'] = ( isset( $BrandData['ID'] ) && !empty( $BrandData['ID'] )) ? $BrandData['ID'] : 0;
-		$this->id = $BrandPostArr['ID'];
-		$BrandPostArr['Code'] = $Code;
-		$BrandPostArr['Name'] = $BrandData['Name'];
-		$BrandPostArr['ShortName'] = $BrandData['ShortName'];
-		$BrandPostArr['SemaBrandAlias'] = $BrandData['SemaBrandAlias'];
-		$BrandPostArr['Description'] = $BrandData['Description'];
-		$BrandPostArr['Status'] = 1;
-		$BrandPostArr['CreatedDate'] = (isset( $BrandData['CreatedDate'] ) && !empty( $BrandData['CreatedDate'] )) ? $BrandData['CreatedDate'] :  $TransactionDetails['CreatedDate'];
-		$BrandPostArr['ModifiedDate'] = $TransactionDetails['ModifiedDate'];
-		
-		$BrandCodeArr = $this->GenerateBrandCodePostData( $BrandData['BrandCode'], $BrandData['Name'],$TransactionDetails, $this->id, $action );
-		$BrandClassArr = $this->GenerateBrandClassPostData( $BrandData['ClassID'], $TransactionDetails, $this->id );
-		$BrandArr = array();
-		$BrandArr[$this->parent] = $BrandPostArr;		
-		$BrandArr[$this->child] = $BrandClassArr;		
-		$BrandArr[$this->childCode] = $BrandCodeArr;
-		return $BrandArr;
-	}
-
-	//GenerateBrandPostData: generate brands class post database for associated table
-	public function GenerateBrandClassPostData($BrandClassData, $TransactionDetails, $id) {
-		$BrandClassArr = array();
-		foreach ($BrandClassData as $BrandDatakey => $BrandDatavalue) {			 
-			$BrandClassArr[$BrandDatakey]['BrandID'] = $id;
-			$BrandClassArr[$BrandDatakey]['ClassID'] = $BrandDatavalue;
-			$BrandClassArr[$BrandDatakey]['BrandCodeID'] = 0;
-			$BrandClassArr[$BrandDatakey]['CreatedDate'] = $TransactionDetails['CreatedDate'];
-			$BrandClassArr[$BrandDatakey]['ModifiedDate'] = $TransactionDetails['ModifiedDate'];
-			$BrandClassArr[$BrandDatakey]['Status'] = $TransactionDetails['Status'];	
-		}
-			return $BrandClassArr;
-	}
-
-	public function GenerateBrandCodePostData( $BrandCodeData, $BrandName, $TransactionDetails, $id, $action ) {
-		$BrandCodeArray = array();
-		foreach ($BrandCodeData as $CodeKey => $CodeValue) {			
-			$BrandCodeArray[$CodeKey]['BrandID'] = $id;
-			$BrandCodeArray[$CodeKey]['BrandCode'] = $CodeValue;
-			$BrandCodeArray[$CodeKey]['AppendBrandCode'] = $BrandName."-".$CodeValue;
-			$BrandCodeArray[$CodeKey]['CreatedDate'] = $TransactionDetails['CreatedDate'];
-			$BrandCodeArray[$CodeKey]['ModifiedDate'] = $TransactionDetails['ModifiedDate'];
-			$BrandCodeArray[$CodeKey]['Status'] = $TransactionDetails['Status'];
-		}
-		
-		return $BrandCodeArray;
-	}
 
 	//Form poup Add & edit Ajax Name :  on submit of brands popup form set validation
 	public function ajaxValidation() {

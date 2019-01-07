@@ -39,6 +39,7 @@ class Brand extends CI_Model{
         }
 
 
+    // fetch the index data for all brands for listing
     public function GetbrandCodeViewData() {
         $this->db->select("BB.BrandCode, B.Name BrandName, B.ID, BB.ID CodeID,B.Description");
        
@@ -55,114 +56,115 @@ class Brand extends CI_Model{
        return $ReturnCodeArr;
     }
 
-    public function UpdateBrandCodeStatus($BrandID, $CodeID) {
+    // public function UpdateBrandCodeStatus($BrandID, $CodeID) {
        
-       $CodeID =  explode(",",$CodeID);
-        if(!empty($CodeID)){
-            foreach ($CodeID as $key => $value) {
-                $this->db->set('Status', '0');
-                $Where = array("BrandID" => $BrandID,"ID"=>$value);
-                $this->db->where($Where);
-                $this->db->update('brand_code_bridge');
-            }
-        }
+    //    $CodeID =  explode(",",$CodeID);
+    //     if(!empty($CodeID)){
+    //         foreach ($CodeID as $key => $value) {
+    //             $this->db->set('Status', '0');
+    //             $Where = array("BrandID" => $BrandID,"ID"=>$value);
+    //             $this->db->where($Where);
+    //             $this->db->update('brand_code_bridge');
+    //         }
+    //     }
      
-    return true;
+    // return true;
+    // }
+
+    // generarte the common brands array for edit delete and add
+    public function GetCommonArray( $BrandData ) {
+        $CommonData = array(
+            "Name" => $BrandData["Name"],
+            "ID" => $BrandData["ID"],
+            "ShortName" => $BrandData["ShortName"],
+            "SemaBrandAlias" => $BrandData["SemaBrandAlias"],
+            "Description" => $BrandData["Description"],
+            "ClassID" => $BrandData["ClassID"]
+        );
+
+        return $CommonData;
     }
 
-    public function GetCodeBridgeData( $id ) {
-            $this->db->select("*");       
-            $this->db->from("brand_code_bridge BB");
-            $WhereCondition = array("BB.Status"=>1, "BB.Status" =>1);
-            $this->db->where($WhereCondition); 
-            $query = $this->db->get();
-            $BrandCodeData = $query->result_array();
-           
-            return $BrandCodeData;
-    }
-
-    public function EditDataPostDB($data) {
+    //called from edit: post the data in edit case
+    public function SaveData( $BrandData ) {
+        $BrandCodeData = $BrandData["Brand"];
         
-        $BrandCodeDBData = $this->GetCodeBridgeData($data["ID"]);
-        $BrandDataArr  = array();        
-        $this->BrandDataUpDate($data);
-        $ArrayStatus = array_combine ($data["BrandCode"], $data["CodeID"]);
-        foreach ($ArrayStatus as $key => $value) {
-            if($value == 0 ) {
-                $BrandDataArr[$key]["ID"] = 0;
-                $BrandDataArr[$key]["BrandID"] =$data["ID"];
-                $BrandDataArr[$key]["BrandCode"] = $key;
-                $BrandDataArr[$key]["AppendBrandCode"] = $key."-".$data["Name"];
-                $BrandDataArr[$key]['CreatedDate'] = date("Y-m-d H:i:s");   
-                $BrandDataArr[$key]['ModifiedDate'] = date("Y-m-d H:i:s");   
-                $BrandDataArr[$key]['Status'] = 1;   
-                $BrandDataArr = array_values($BrandDataArr);
-           
-                $this->db->insert_batch( "brand_code_bridge" , $BrandDataArr );
-                $LastInsertID  = $this->db->insert_id();
-                foreach ($data["ClassID"] as $Ckey => $Cvalue) {
-                    $BrandClassDataArr  = array();
-                    $BrandClassDataArr[$Ckey]["ID"] = 0;
-                    $BrandClassDataArr[$Ckey]["BrandID"] =$data["ID"];
-                    $BrandClassDataArr[$Ckey]["ClassID"] = $Cvalue;
-                    $BrandClassDataArr[$Ckey]["BrandCodeID"] = $LastInsertID;
-                    $BrandClassDataArr[$Ckey]['CreatedDate'] = date("Y-m-d H:i:s");   
-                    $BrandClassDataArr[$Ckey]['ModifiedDate'] = date("Y-m-d H:i:s");   
-                    $BrandClassDataArr[$Ckey]['Status'] = 1;
-                    $this->db->insert_batch( "sema_brand_class_bridge" , $BrandClassDataArr ); 
-                    unset($BrandClassDataArr);  
-                }
-            }
-            
-            // else {
-            //     foreach ($BrandCodeDBData as $Brandkey => $Brandvalue) {
-            //         //  echo "<-->";
-            //         $BrandDataArrs = array();
-            //         if (in_array($value, $Brandvalue)) {
-            //             print_r($value);
-            //             $BrandDataArrs["ID"] = $value;
-            //             $BrandDataArrs["BrandID"] =$data["ID"];
-            //             $BrandDataArrs["BrandCode"] = $key;
-            //             $BrandDataArrs["AppendBrandCode"] = $key."-".$data["Name"];
-            //             $BrandDataArrs['CreatedDate'] = date("Y-m-d H:i:s");   
-            //             $BrandDataArrs['ModifiedDate'] = date("Y-m-d H:i:s");   
-            //             $BrandDataArrs['Status'] = 1;  
-            //             $this->db->set($BrandDataArrs);
-            //             $Where = array("BrandID" => $data["ID"],"ID"=>$value);
-            //             $this->db->where($Where);
-            //             $this->db->update('brand_code_bridge');
-            //             unset($BrandDataArrs);  
+        $CommonData = $this->GetCommonArray($BrandData);       
 
-            //             foreach ($data["ClassID"] as $Ckey => $Cvalue) {
-            //                 $BrandClassDataArr  = array();
-            //                 $BrandClassDataArr[$Ckey]["ID"] = 0;
-            //                 $BrandClassDataArr[$Ckey]["BrandID"] =$data["ID"];
-            //                 $BrandClassDataArr[$Ckey]["ClassID"] = $Cvalue;
-            //                 $BrandClassDataArr[$Ckey]["BrandCodeID"] = $value;
-            //                 $BrandClassDataArr[$Ckey]['CreatedDate'] = date("Y-m-d H:i:s");   
-            //                 $BrandClassDataArr[$Ckey]['ModifiedDate'] = date("Y-m-d H:i:s");   
-            //                 $BrandClassDataArr[$Ckey]['Status'] = 1;
-            //                 // $this->db->insert_batch( "sema_brand_class_bridge" , $BrandClassDataArr ); 
-            //                 unset($BrandClassDataArr);  
-            //             }
-            //         } else {
-            //           echo "<-->";  print_r($value);
-            //             $this->db->set('Status', '0');
-            //             $Where = array("BrandID" => $data["ID"],"ID"=>$value);
-            //             $this->db->where($Where);
-            //             $this->db->update('brand_code_bridge');
-            //         }                   
-            //     }
-            // }exit;
+        $this->UpdateBrand($CommonData);
+        foreach ($BrandCodeData as $key => $value) {
+            if($value["RowState"] == "435") {
+                $this->addBrand($value, $CommonData );
+            } else if($value["RowState"] == "437") { 
+                if($value["CodeID"] != 0 ) {
+                   $this->DeleteBrand($value["CodeID"], $CommonData );
+                }
+            } else if($value["RowState"] == "436") { 
+                if($value["CodeID"] != 0 ) {
+                   $this->UpdateEditBrand($value, $CommonData,$value["CodeID"],$CommonData["ID"]  );
+                }
+            } 
+
         }
+    }
+
+    // update the sema class bridge data
+    public function UpdateEditBrand($NewData, $data, $CodeID, $BrandID) {
+       
+           $this->GenerateClassBrideData($NewData,$data,$CodeID,$BrandID );
+    }
+
+    // insert the brand code data 
+    public function addBrand($NewData, $data, $BrandID) {
+        $BrandID = (isset($data["ID"]) && !empty($data["ID"])) ? $data["ID"] : $BrandID;
+        $InsertBrandArr = array(
+            "BrandID" =>$BrandID,
+            "BrandCode" =>$NewData["BrandCode"],
+            "AppendBrandCode" =>$NewData["BrandCode"]."-".$data["Name"],
+            "AppendBrandCode" =>$NewData["BrandCode"]."-".$data["Name"],
+            "CreatedDate" =>date("Y-m-d H:i:s"),
+            "ModifiedDate" =>date("Y-m-d H:i:s"),
+            "Status" =>1
+        );
+        $this->db->insert('brand_code_bridge', $InsertBrandArr);
+        $LastInsertID = $this->db->insert_id();
+
+        $this->GenerateClassBrideData($NewData,$data,$LastInsertID,$BrandID );
+       
+    }
+
+    // generate a brand class bridge data
+    public function GenerateClassBrideData($NewData,$data,$LastInsertID, $BrandID )
+    {
+        $ClassArr =[];
+        foreach ($data["ClassID"] as $key => $value) {
+            $ClassArr[$key]["BrandID"] = $BrandID;
+            $ClassArr[$key]["ClassID"] = $value;
+            $ClassArr[$key]["BrandCodeID"] = $LastInsertID;
+            $ClassArr[$key]["CreatedDate"] = date("Y-m-d H:i:s");
+            $ClassArr[$key]["ModifiedDate"] =date("Y-m-d H:i:s");
+            $ClassArr[$key]["Status"] = 1;
+        }
+        $this->db->insert_batch('sema_brand_class_bridge', $ClassArr);
 
     }
 
-    public function BrandDataUpDate( $data ) {
+    // delete brand set status to zero
+    public function DeleteBrand($CodeID, $data) {
+        $setData = array( "Status" => 0 );
+        $Where = array("BrandID" => $data["ID"], "ID" => $CodeID);
+        $this->db->where($Where);
+        $this->db->set($setData);
+        $this->db->update('brand_code_bridge');
+    }
+
+    // update brands data common for add, edit and delete case if change
+    public  function UpdateBrand($data) {
         $setData = array(
             "Name" =>$data["Name"],
             "SemaBrandAlias"=> $data["SemaBrandAlias"],
             'Description'=>$data["Description"],
+            'ShortName'=>$data["ShortName"],
             'ModifiedDate'=>date("Y-m-d H:i:s") 
         );
         $Where = array("ID" => $data["ID"]);
@@ -170,4 +172,22 @@ class Brand extends CI_Model{
         $this->db->set($setData);
         $this->db->update('brands');
     }
+
+    // add New brand this is add brand case
+    public function AddNewBrand($data) {
+        $CommonData = $CommonInsertData = $this->GetCommonArray($data);
+        unset($CommonInsertData["ClassID"]);
+        $CommonInsertData["CreatedDate"] = date("Y-m-d H:i:s"); 
+        $CommonInsertData["ModifiedDate"] = date("Y-m-d H:i:s"); 
+        $CommonInsertData["Status"] =1; 
+
+        $this->db->insert('brands', $CommonInsertData);
+        $LastInsertID = $this->db->insert_id();
+
+
+        foreach ($data["Brand"] as $key => $value) {
+            $this->addBrand($value, $CommonData, $LastInsertID );
+        }
+    }
+  
 }
