@@ -16,15 +16,17 @@ class TagManagement extends CI_Model{
         return  $insert_id;
     }
 
-    public function selectTags(){
+    public function selectTags($BrandID){
         
         $this->db->select();
         $this->db->from('tag_management');
+        $this->db->where('BrandID', $BrandID);
         $this->db->order_by("id", "desc");
         $query = $this->db->get();
         return $query->result();
 
     }
+
 
     public function deleteTag($id){
         $this->db->where('id', $id);

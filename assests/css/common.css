@@ -192,3 +192,7 @@ ul.BrandCode {
     background: transparent url("http://loudev.com/img/switch.png") no-repeat 50% 50%;
     /* width: 370px; */
 }
+
+.edit-tag, .margin{
+  margin-right: 5%;
+}

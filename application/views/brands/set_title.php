@@ -47,8 +47,8 @@
             ?>
             <div class="form-group">
                 <div class="row">
-                        <div class="col-md-4"><strong>Title :</strong></div>
-                        <div  id="InputElement" class="col-md-8"></div>
+                        <div class="col-md-2"><strong>Title :</strong></div>
+                        <div  id="InputElement" class="col-md-10"></div>
                 </div>
             </div>
             <div class="form-group">
@@ -82,42 +82,36 @@
 	// run callbacks
         var TitleDisplaylabel =  "<?php echo trim($TitleDisplaylabel); ?>"; 
         // console.log(TitleDisplaylabel);  
-        var StringVal = "";
-        
+       
+        var concat = concatStr = "";
 		$('#callbacks').multiSelect({
              selectableOptgroup: true,
-			afterSelect: function(values) {
+			afterSelect: function(values) {               
                 var selectedText =  $("#callbacks option[value='"+values+"']").text();
-
-                var concat = concatStr = "";
-                if($(".count-class").length > 0 ){
+                 var StringVal = "";
+                 
+                if($(".space").length > 0 ) {
                     concat = "-";
                     concatStr = ",";
                 } 
-				$("#InputElement").append('<span class="count-class"><span class="space">'+concat+'</span><label class="input-configuration" id="'+values+'">'+selectedText+'</label></span>');
+                StringVal =  $(".set-input").val();
+                $(".append_ul").append('<li id="'+values+'">'+selectedText+'</li>');
+				$("#InputElement").append('<span class="count-class"><span class="space">'+concat+'</span><label class="input-configuration" id="values'+values+'">'+selectedText+'</label></span>');
                 StringVal = StringVal+concatStr+selectedText;
                 $(".set-input").val(StringVal);
-			},
-			afterDeselect: function(values){
-                concatStr = ",";
-                var selectedText =  $("#callbacks option[value='"+values+"']").text();
-
-                var result = StringVal.split(',');
-                    for (var key in result) {
-                        if (result[key].trim() == selectedText.trim()) {
-                              result.splice(key, 1);
-                        }
-                    }
-                    
-                    StringVal = result.join(", ");
-                $("#"+values).parent("span.count-class").remove();
-                $(".set-input").val(StringVal);
-			}
+            }
 		});
 
         AddandAppendElementClass();
 		
-
+          $(document).on('click','.append_ul li',function() {
+            var ElemntLi = $(this).html();
+            AfterDelectOnUI( ElemntLi );   
+            SetThePostInputValue(ElemntLi);            
+            var id = $(this).attr("id");
+            RemoveTitleConfiguration( id );
+            $(this).remove();
+        });
 
         $( "#ModalClose" ).click( function() {
             $( "#append_brand_form" ).modal( 'hide' );
@@ -128,22 +122,11 @@
 
 
         $("#FormSubmit").click(function(){
-            var StringVal = $(".set-input").val();
-            console.log(StringVal);
-                StringVal = StringVal.replace(",", " - ");
-            $.confirm({
-                title: 'Title Configuration !',                
-                content: 'Title sequence : '+StringVal,
-                draggable: true,
-                buttons: {
-                    Yes: function () {
-                        $("form#SetTitle").submit();   
-                    },
-                    No: function () {
-                        $.alert('Canceled!');
-                    }
-                }
-            });
+                var ReplaceString = $(".set-input").val();
+                ReplaceString = ReplaceString.replace(/\,/g, ' - ');
+
+                confirmDialog(ReplaceString);
+           
             return false;
         });
 
@@ -153,25 +136,82 @@
     function AddandAppendElementClass() {
         $(".ms-selectable").addClass("col-md-5");
         $(".ms-selectable").addClass("border");
-		$(".ms-selectable").after('<div class="col-md-2 text-center"><div class="row"></div></div>');
-		$(".ms-selection").addClass("col-md-5");
+        $(".ms-selectable").after('<div class="col-md-2 text-center"><div class="row"></div></div>');
+        $(".ms-selection").css("display","none");
+        $(".ms-selection").after('<div class="col-md-5 border append-container"><ul class="append_ul"></ul></div>');
+		// $(".ms-selection").addClass("col-md-5");
 		$(".ms-selection").addClass("border");
     }
 
      function DisplaySelectedFields(TitleDisplaylabel) {
         TitleDisplaylabel = TitleDisplaylabel.split(',');
-        var concat =concatStr=StringVal= "";
-        $.each($(".ms-selectable ul li.ms-elem-selectable"),function(Titleindex, Titlevalues) {
-                var CheckValTitle = $(this).children("span").html();
-                var Element = $(this);
+        var concat =concatStr= "";
 
-            $.each(TitleDisplaylabel,function(index, values) {
-                if(CheckValTitle.trim() == values.trim()){
+        $.each(TitleDisplaylabel,function(index, values) {
+            $.each($(".ms-selectable ul li.ms-elem-selectable"),function(Titleindex, Titlevalues) {
+                 var CheckValTitle = $(this).children("span").html();
+                 var Element = $(this);
+                //  console.log(values.trim()+" == "+CheckValTitle.trim());
+                 if(values.trim() == CheckValTitle.trim()){
                      Element.trigger("click");
                 }
-            });
+            });            
+        });        
+    }
+
+    // on click of selected element function called to remove values from hidden ul structure
+    function  AfterDelectOnUI(ElemntLi) {
+        $.each($(".ms-selection ul li.ms-elem-selection"),function(Titleindex, Titlevalues) {
+            if(ElemntLi.trim() == $(this).find("span").html().trim()){
+                console.log(ElemntLi.trim()+" == "+$(this).find("span").html().trim());
+                $(this).trigger("click");
+            }
         });
     }
 
+    // remove the title display after selecting and delecting the elements
+    function  RemoveTitleConfiguration(id) {
+        $.each($("#InputElement").find(".input-configuration"), function(index) {
+            if($(this).attr("id") == "values"+id) {
+                if(index == 0 ) {
+                    $(this).parent("span").next("span").children("span.space").remove();
+                    $("#values"+id).prev("span").remove();
+                } else {
+                    $("#values"+id).prev("span").remove();
+                }
+                $("#values"+id).remove();
+            }                    
+        });
+    }
 
+    // input hidden field value, set value to post in database
+    function SetThePostInputValue(ElemntLi) {
+        var ChangeString = $(".set-input").val();
+        var result = ChangeString.split(',');
+
+        for (var key in result) {
+            if (result[key].trim() == ElemntLi.trim()) {
+                 result.splice(key, 1);
+            }
+        }
+
+        ChangeString = result.join(", ");
+        $(".set-input").val(ChangeString); 
+    }
+
+    function confirmDialog(StringVal) {
+        $.confirm({
+            title: 'Title Configuration !',                
+            content: 'Title sequence : '+StringVal,
+            draggable: true,
+            buttons: {
+                Yes: function () {
+                    $("form#SetTitle").submit();   
+                },
+                No: function () {
+                    $.alert('Canceled!');
+                }
+            }
+        });
+    }
   </script>

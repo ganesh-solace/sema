@@ -98,7 +98,7 @@ class Brands extends BaseController {
 			 $BrandData = $this->input->post();
 			 $Code = $this->GenerateCode('brands',"B");
 			 $this->Brand->AddNewBrand($BrandData);
-			 $this->CreateBrandFloderFTP( $BrandData );
+			//  $this->CreateBrandFloderFTP( $BrandData );
 			 redirect("DashBoards");
 		 }
 		
@@ -152,8 +152,9 @@ class Brands extends BaseController {
 			$this->ftp->mkdir($CheckBrandDirPath, 0777);
 			$this->ftp->chmod($CheckBrandDirPath, 0777);
 		}
-		foreach ($FtpRequiredData["BrandCode"] as $BrandKey => $BrandValue) {
-			$BrandValue = strtolower( $BrandValue );
+		
+		foreach ($FtpRequiredData["Brand"] as $BrandKey => $BrandValue) {
+			$BrandValue = strtolower( $BrandValue['BrandCode'] );
 			$BrandValue = str_replace(" ", "_", $BrandValue);
 			$BrandValueFolderPath = $CheckBrandDirPath.$BrandValue."/";
 			if(!is_dir($BrandValueFolderPath)) {
