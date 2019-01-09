@@ -201,6 +201,10 @@
         });
         
         $("#AddNewRow").click(function(){
+            if($("div.text-danger").length > 0 ){
+                $("div.text-danger").remove(); 
+            }
+            
             var InputValue = $(this).parents("div.row").find("#BrandCode").val();
             InputValue = InputValue.trim();
             if(InputValue == "") {
@@ -241,60 +245,49 @@
         });
 
 
-        // $("#FormSubmit").click(function( e ) {     
-        //     e.preventDefault();
-        //      var BrandCode = "";
-        //     if(typeof $("input[name='BrandCode[]']").val() != "undefined"){
-        //         BrandCode = $("input[name='BrandCode[]']").val();
-        //     }
-        //     var FormData = {   Name : $('#BrandName').val(), BrandCode: BrandCode   };
+        $("#FormSubmit").click(function( e ) {     
+            e.preventDefault();
+             var BrandCode = "";
+            if(typeof $("input.readonly-set").val() != "undefined"){
+                BrandCode = $("input.readonly-set").val();
+            }
+            
+            var FormData = {   Name : $('#BrandName').val(), BrandCode: BrandCode   };
 
-        //         var flag = false;
-        //         $.ajax({
-        //             url: "<?php echo base_url();?>"+"brands/ajaxValidation",
-        //             type: 'POST',                    
-        //             dataType: "json",                    
-        //             data: FormData,
-        //             success: function(data) {
-        //                if( !$.isEmptyObject(data)) {
-        //                   $("div.text-danger").remove(); 
-        //                    $.each(data["error"], function(i,Values) {
-        //                             // var ElementAddError =  $("input[name='"+Values["key"]+"']");
-        //                       var ElementAddError =  $("#BrandCode");
+                var flag = false;
+            $.ajax({
+                url: "<?php echo base_url();?>"+"brands/ajaxValidation",
+                type: 'POST',                    
+                dataType: "json",                    
+                data: FormData,
+                success: function(data) {
+                    if( !$.isEmptyObject(data)) {
+                        $("div.text-danger").remove(); 
+                        $.each(data["error"], function(i,Values) {
+                            var ElementAddError =  $("#BrandCode");
 
-        //                        if($("input[name='"+Values["key"]+"']").length > 0 ){
-        //                              var ElementAddError =  $("input[name='"+Values["key"]+"']");
-        //                         }
-        //                             // if(Values["key"] == "BrandCode[]"){
-        //                             //     ElementAddError =ElementAddError.eq(0);
-        //                             // }
-        //                            ElementAddError.after('<div class="text-danger">'+Values["value"]+'</div>');
-                               
-        //                    });
-        //                }  else {
-        //                    if( $(".error").length > 0 ) $("div.text-danger").remove(); 
-        //                     beforeSumitAddStatusFeild();
-        //                     $("#BrandAdd").submit();
-        //                }
-        //             }
-        //         });
-        // });
+                            if($("input[name='"+Values["key"]+"']").length > 0 ){
+                                    var ElementAddError =  $("input[name='"+Values["key"]+"']");
+                            }
+
+                                ElementAddError.after('<div class="text-danger">'+Values["value"]+'</div>');
+                            
+                        });
+                    }  else {
+                        if( $(".error").length > 0 ) $("div.text-danger").remove(); 
+                        $("#BrandAdd").submit();
+                    }
+                }
+            });
+        });
     });
 
-// function beforeSumitAddStatusFeild() {
-//      $.each($("input[name='BrandCode[]']"), function(k,Status) {
-//          $('<input />').attr('type', 'hidden')
-//           .attr('name', "Status[]")
-//           .attr('value',$(this).attr("status"))
-//           .appendTo('#FormSubmit');
-//      });
-// }
 
-        function DeleteRow(e,flag) {
-          event.preventDefault();
-          e.parent().parent("div.row").find("#RowState").val("437");
-          e.parent().parent("div.row").css("display","none");
-        }
+    function DeleteRow(e,flag) {
+        event.preventDefault();
+        e.parent().parent("div.row").find("#RowState").val("437");
+        e.parent().parent("div.row").css("display","none");
+    }
 
 
 </script>

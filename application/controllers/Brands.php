@@ -98,7 +98,7 @@ class Brands extends BaseController {
 			 $BrandData = $this->input->post();
 			 $Code = $this->GenerateCode('brands',"B");
 			 $this->Brand->AddNewBrand($BrandData);
-			//  $this->CreateBrandFloderFTP( $BrandData );
+			 $this->CreateBrandFloderFTP( $BrandData );
 			 redirect("DashBoards");
 		 }
 		

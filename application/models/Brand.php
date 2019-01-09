@@ -76,10 +76,10 @@ class Brand extends CI_Model{
         $CommonData = array(
             "Name" => $BrandData["Name"],
             "ID" => $BrandData["ID"],
-            "ShortName" => $BrandData["ShortName"],
-            "SemaBrandAlias" => $BrandData["SemaBrandAlias"],
-            "Description" => $BrandData["Description"],
-            "ClassID" => $BrandData["ClassID"]
+            "ShortName" => isset($BrandData["ShortName"])? $BrandData["ShortName"] : "",
+            "SemaBrandAlias" => isset($BrandData["SemaBrandAlias"]) ? $BrandData["SemaBrandAlias"] : "",
+            "Description" => isset($BrandData["Description"]) ? $BrandData["Description"] : "",
+            "ClassID" => isset($BrandData["ClassID"]) ?$BrandData["ClassID"] : ""
         );
 
         return $CommonData;
@@ -137,15 +137,18 @@ class Brand extends CI_Model{
     public function GenerateClassBrideData($NewData,$data,$LastInsertID, $BrandID )
     {
         $ClassArr =[];
-        foreach ($data["ClassID"] as $key => $value) {
-            $ClassArr[$key]["BrandID"] = $BrandID;
-            $ClassArr[$key]["ClassID"] = $value;
-            $ClassArr[$key]["BrandCodeID"] = $LastInsertID;
-            $ClassArr[$key]["CreatedDate"] = date("Y-m-d H:i:s");
-            $ClassArr[$key]["ModifiedDate"] =date("Y-m-d H:i:s");
-            $ClassArr[$key]["Status"] = 1;
+        if(isset($data["ClassID"]) && !empty($data["ClassID"])){
+            foreach ($data["ClassID"] as $key => $value) {
+                $ClassArr[$key]["BrandID"] = $BrandID;
+                $ClassArr[$key]["ClassID"] = $value;
+                $ClassArr[$key]["BrandCodeID"] = $LastInsertID;
+                $ClassArr[$key]["CreatedDate"] = date("Y-m-d H:i:s");
+                $ClassArr[$key]["ModifiedDate"] =date("Y-m-d H:i:s");
+                $ClassArr[$key]["Status"] = 1;
+            }
+            $this->db->insert_batch('sema_brand_class_bridge', $ClassArr);
         }
-        $this->db->insert_batch('sema_brand_class_bridge', $ClassArr);
+        
 
     }
 

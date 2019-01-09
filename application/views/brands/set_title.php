@@ -143,6 +143,9 @@
 
             DisplaySelectedFields(TitleDisplaylabel, TitleSeprator);
 
+             $("#Sperator").click(function(){
+                 $(this).focus();
+             });
             $("#Sperator").change(function() {
                 var OldSeperator =  $("input[name='TitleSeprator']").val();
                 $("input[name='TitleSeprator']").val($(this).val());
@@ -237,7 +240,17 @@
         var SepratorStr = $("input[name='TitleSeprator']").val();
             SepratorStr = SepratorStr;
         var TitleStr = $(".set-input").val();
-            TitleStr = TitleStr.replace(new RegExp(OldSeperator, 'g'), SepratorStr);
+        
+            if(OldSeperator.trim() == "|") {
+                 TitleStr = TitleStr.replace(/\|/g, SepratorStr);
+            } else if(OldSeperator.trim() == "+") {
+                 TitleStr = TitleStr.replace(new RegExp("\\+","g"),SepratorStr);
+            }else if(OldSeperator.trim() == ".") {
+                 TitleStr = TitleStr.replace(/\./g,SepratorStr);
+            } else {
+                TitleStr = TitleStr.replace(new RegExp(OldSeperator, 'g'), SepratorStr);
+            }
+            
             $(".set-input").val( TitleStr );
 
             $.each($(".space"), function(index,value){
