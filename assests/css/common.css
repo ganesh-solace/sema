@@ -173,10 +173,12 @@ ul.BrandCode {
 .border{
 			    border: 2px solid #e2d9d9;
     min-height: 150px;
+    
     overflow-y: auto;
     padding-top: 15px;
     background: whitesmoke;
     padding-bottom: 15px;
+    min-height: 250px;
 		}
 		ul.ms-list {
 			list-style: none;
@@ -195,4 +197,8 @@ ul.BrandCode {
 
 .edit-tag, .margin{
   margin-right: 5%;
+}
+
+ul.append_ul {
+    list-style: none;
 }

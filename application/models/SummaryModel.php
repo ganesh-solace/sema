@@ -96,14 +96,35 @@ class SummaryModel extends CI_Model{
          return $query;
     }
 
-    public function GetTitleValues($Title) {
-         $this->db->select('GROUP_CONCAT(jp_fields) jp_fields');
-         $this->db->where("FIND_IN_SET(`text`, '".$Title."') !=", 0);         
+    public function GetTitleFieldsArray() {
+     
+         $this->db->select(' text,jp_fields');
+        //  $this->db->where("FIND_IN_SET(`text`, '".$Title."') !=", 0); 
+         $this->db->where("Status", 1);         
          $this->db->from("title_configuration");
-     $query = $this->db->get();
-     $query =  $query->result_array()[0];
-    
-     return $query;
+        $query = $this->db->get();
+         $TitleConfigurationArr =  $query->result_array();
+         $TitleConfArr = array();
+        foreach ($TitleConfigurationArr as $ConfKey => $ConfValue) {
+            $TitleConfArr[$ConfValue["text"]] =  $ConfValue["jp_fields"];
+            
+        }
+     return $TitleConfArr;
+    }
+
+    public function GetPostTitleValues($MainTitleArr, $TitleStr, $TitleSeprator) {
+        $TitleArray = explode($TitleSeprator,$TitleStr);
+        $ExplodeArr = array();
+        foreach ($TitleArray as $TitleKey => $TitleValue) {
+            $TitleValue =trim($TitleValue);
+            if(isset($MainTitleArr[$TitleValue]) && !empty($MainTitleArr[$TitleValue])){
+                $ExplodeArr[] = $MainTitleArr[$TitleValue];
+            }
+        }
+        
+        $JpFeildsStr = implode($TitleSeprator, $ExplodeArr);
+
+        return $JpFeildsStr;
     }
     
 }

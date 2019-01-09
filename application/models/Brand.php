@@ -94,7 +94,7 @@ class Brand extends CI_Model{
         $this->UpdateBrand($CommonData);
         foreach ($BrandCodeData as $key => $value) {
             if($value["RowState"] == "435") {
-                $this->addBrand($value, $CommonData );
+                $this->addBrand($value, $CommonData,$CommonData["ID"]  );
             } else if($value["RowState"] == "437") { 
                 if($value["CodeID"] != 0 ) {
                    $this->DeleteBrand($value["CodeID"], $CommonData );

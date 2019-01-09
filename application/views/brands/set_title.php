@@ -7,14 +7,15 @@
 <?php
     $TitleDisplaylabel = "";
     if(isset($TitleDisplayData) && !empty($TitleDisplayData)){
+        
+        $TitleSeprator = (isset($TitleDisplayData[0]->TitleSeprator) && !empty($TitleDisplayData[0]->TitleSeprator)) ? $TitleDisplayData[0]->TitleSeprator : "-";
         if(isset($TitleDisplayData[0]->BrandTitle)){
             $TitleDisplaylabel = $TitleDisplayData[0]->BrandTitle;
-            $TitleDisplaylabel = explode(",", $TitleDisplaylabel);
-            // unset($TitleDisplaylabel[0]);
+            $TitleDisplaylabel = explode($TitleSeprator, $TitleDisplaylabel);
 
             $TitleDisplaylabel = array_map('trim', $TitleDisplaylabel);
 
-            $TitleDisplaylabel = implode(",", $TitleDisplaylabel);
+            $TitleDisplaylabel = implode($TitleSeprator, $TitleDisplaylabel);
         }
     }
 
@@ -30,6 +31,8 @@
                 </div>
             </div>
             <div class="modal-body">
+            
+               
             <div class="row padding-5 switch">
             <select id='callbacks' multiple='multiple'>
                 <?php
@@ -46,15 +49,22 @@
 
             ?>
             <div class="form-group">
+            <div class="row">
+                        <div class="col-md-5"><strong>Title Seperator Configuration :</strong></div>
+                       <div class="col-md-2"> <input type="text" class=" form-control text-center" name="Sperator" id="Sperator" class="set-seperator" value="<?php echo $TitleSeprator; ?>" /></div>
+             </div>
                 <div class="row">
                         <div class="col-md-2"><strong>Title :</strong></div>
                         <div  id="InputElement" class="col-md-10"></div>
                 </div>
+                
             </div>
             <div class="form-group">
             <input type="hidden" name="Title" class="set-input" value="" />
+            <input type="hidden" name="TitleSeprator" class="set-seperator" value="<?php echo $TitleSeprator; ?>" />
             <input type="hidden" name="BrandID"  value="<?php echo $BrandID; ?>" />
             <input type="hidden" name="ID"  value="<?php echo $CodeID; ?>" />
+             
             </div>
 
             <div class="form-group">
@@ -81,6 +91,7 @@
 	jQuery(document).ready(function( $ ){
 	// run callbacks
         var TitleDisplaylabel =  "<?php echo trim($TitleDisplaylabel); ?>"; 
+        var TitleSeprator =  "<?php echo trim($TitleSeprator); ?>"; 
         // console.log(TitleDisplaylabel);  
        
         var concat = concatStr = "";
@@ -91,10 +102,10 @@
                  var StringVal = "";
                  
                 if($(".space").length > 0 ) {
-                    concat = "-";
-                    concatStr = ",";
+                    concat = concatStr = $("input[name='TitleSeprator']").val();
                 } 
                 StringVal =  $(".set-input").val();
+                
                 $(".append_ul").append('<li id="'+values+'">'+selectedText+'</li>');
 				$("#InputElement").append('<span class="count-class"><span class="space">'+concat+'</span><label class="input-configuration" id="values'+values+'">'+selectedText+'</label></span>');
                 StringVal = StringVal+concatStr+selectedText;
@@ -123,14 +134,20 @@
 
         $("#FormSubmit").click(function(){
                 var ReplaceString = $(".set-input").val();
-                ReplaceString = ReplaceString.replace(/\,/g, ' - ');
+                // ReplaceString = ReplaceString.replace(/\,/g, ' - ');
 
                 confirmDialog(ReplaceString);
            
             return false;
         });
 
-            DisplaySelectedFields(TitleDisplaylabel);
+            DisplaySelectedFields(TitleDisplaylabel, TitleSeprator);
+
+            $("#Sperator").change(function() {
+                var OldSeperator =  $("input[name='TitleSeprator']").val();
+                $("input[name='TitleSeprator']").val($(this).val());
+                ConfigureSeprator( OldSeperator );
+            });
         });
 
     function AddandAppendElementClass() {
@@ -143,10 +160,10 @@
 		$(".ms-selection").addClass("border");
     }
 
-     function DisplaySelectedFields(TitleDisplaylabel) {
-        TitleDisplaylabel = TitleDisplaylabel.split(',');
+     function DisplaySelectedFields(TitleDisplaylabel, TitleSeprator) {
+        TitleDisplaylabel = TitleDisplaylabel.split( TitleSeprator );
         var concat =concatStr= "";
-
+    console.log(TitleSeprator);
         $.each(TitleDisplaylabel,function(index, values) {
             $.each($(".ms-selectable ul li.ms-elem-selectable"),function(Titleindex, Titlevalues) {
                  var CheckValTitle = $(this).children("span").html();
@@ -187,7 +204,8 @@
     // input hidden field value, set value to post in database
     function SetThePostInputValue(ElemntLi) {
         var ChangeString = $(".set-input").val();
-        var result = ChangeString.split(',');
+        var SeperatorStr = $("input[name='TitleSeprator']").val();
+        var result = ChangeString.split(SeperatorStr);
 
         for (var key in result) {
             if (result[key].trim() == ElemntLi.trim()) {
@@ -195,14 +213,14 @@
             }
         }
 
-        ChangeString = result.join(", ");
+        ChangeString = result.join(SeperatorStr);
         $(".set-input").val(ChangeString); 
     }
 
-    function confirmDialog(StringVal) {
+    function confirmDialog(StringVals) {
         $.confirm({
             title: 'Title Configuration !',                
-            content: 'Title sequence : '+StringVal,
+            content: 'Title sequence : '+StringVals,
             draggable: true,
             buttons: {
                 Yes: function () {
@@ -214,4 +232,23 @@
             }
         });
     }
+
+    function ConfigureSeprator( OldSeperator ) {
+        var SepratorStr = $("input[name='TitleSeprator']").val();
+            SepratorStr = SepratorStr;
+        var TitleStr = $(".set-input").val();
+            TitleStr = TitleStr.replace(new RegExp(OldSeperator, 'g'), SepratorStr);
+            $(".set-input").val( TitleStr );
+
+            $.each($(".space"), function(index,value){
+                if(index != 0 ){
+                    $(this).html( " "+SepratorStr+" " );
+                }
+            });
+    }
+
+    // function replaceAll(str, term, replacement) {
+    //     return str.replace(new RegExp(term, 'g'), replacement);
+    // }
+    
   </script>

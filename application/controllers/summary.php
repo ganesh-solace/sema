@@ -44,13 +44,16 @@ class Summary extends BaseController {
     public function PostDisplayTitle() {
         $BrandID = $this->input->post()["BrandID"];
         $ID = $this->input->post()["ID"];
-        $Title = $this->input->post()["Title"];
-        $TitleValues = $this->summary->GetTitleValues($Title);
-        // print_r($Title);exit;
+        $Title = $this->input->post()["Title"]; 
+        $TitleSeprator = $this->input->post()["TitleSeprator"]; 
+        $TitleSeprator = (isset($TitleSeprator) && !empty($TitleSeprator)) ? $TitleSeprator : "-";
+        $TitleConfigArr = $this->summary->GetTitleFieldsArray();
+        $TitleValues = $this->summary->GetPostTitleValues($TitleConfigArr, $Title, $TitleSeprator);
         $WhereCondition = array("BrandID" =>$BrandID, "ID" => $ID, "Status" => 1);
 
         $this->db->set('BrandTitle', $Title);
-        $this->db->set('BrandTitleValues', $TitleValues["jp_fields"]);
+        $this->db->set('BrandTitleValues', $TitleValues);
+        $this->db->set('TitleSeprator', $TitleSeprator);
         $this->db->where( $WhereCondition );
         $this->db->update('brand_code_bridge');
         $_SESSION["summary"]["BrandID"] = $BrandID;
@@ -62,7 +65,7 @@ class Summary extends BaseController {
         $whereCondition = array("Status" => 1);
        $TitleData = $this->SelectQuery('title_configuration', "value,text", $whereCondition ); 
        $where = array("BrandID" => $BrandID, "ID" => $CodeID, 'Status' => 1 ); 
-       $TitleDisplayData = $this->SelectQuery('brand_code_bridge', "BrandTitle", $where );
+       $TitleDisplayData = $this->SelectQuery('brand_code_bridge', "BrandTitle, TitleSeprator", $where );
        $TitleArray["TitleData"] = $TitleData;
        $TitleArray["TitleDisplayData"] = $TitleDisplayData;
        return $TitleArray;

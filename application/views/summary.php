@@ -109,8 +109,9 @@
                     <?php
                         $TitleDisplaylabel = "-";
                         if(isset($TitleDisplayData) && !empty($TitleDisplayData)){
+                            $TitleSeprator = isset($TitleDisplayData[0]->TitleSeprator) ? $TitleDisplayData[0]->TitleSeprator : "-";
                             if(isset($TitleDisplayData[0]->BrandTitle)){
-                                $TitleDisplaylabel = str_replace(","," - ", $TitleDisplayData[0]->BrandTitle);
+                                $TitleDisplaylabel = str_replace($TitleSeprator," ".$TitleSeprator." ", $TitleDisplayData[0]->BrandTitle);
                             }
                         }
                     ?>
